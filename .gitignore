@@ -1,0 +1,8 @@
+# Runtime state written by the lab
+lab/lab-cleanup.json
+
+# Report produced by the -OutputPath example in the README.
+# Anchored to the root so that samples/output.json stays tracked.
+/report.json
+
+*.tmp

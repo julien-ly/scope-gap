@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "toolVersion": "0.1.0",
+    "generatedAt": "2026-08-19T19:58:58.1099887Z",
+    "powerShellVersion": "7.6.5",
+    "disclaimer": "Conclusions are bounded to the analyzed path. Other assignment mechanisms were not evaluated."
+  },
+  "group": {
+    "id": "fc189bff-d79f-4880-953d-7e2d5304f0e8",
+    "displayName": "Lab-Scope-Devices",
+    "membershipRule": "(device.displayName -startsWith \"LAB-WKS-\")",
+    "membershipRuleProcessingState": "On",
+    "memberCount": 2,
+    "objectType": "device"
+  },
+  "intentSource": {
+    "status": "Available",
+    "path": ".\\samples\\lab-intent.json",
+    "description": "Expected workstation population for lab compliance baseline.",
+    "asOf": "2026-08-19T19:58:13.2682477Z",
+    "sha256": "5F647C7A1088CDF8E852113AF55802043E2C1840BED33B001726D4CB38F10059",
+    "complete": true,
+    "declaredObjectCount": 4,
+    "resolvedObjectCount": 4,
+    "notResolved": 0,
+    "duplicatesIgnored": 0
+  },
+  "policy": {
+    "id": "caede6bc-7cdc-438e-848f-77d9e2d3bee5",
+    "displayName": "Lab-Baseline-Win11",
+    "directGroupAssignmentPresent": true,
+    "objectType": "device",
+    "assignmentFilterId": null,
+    "assignmentFilterType": null,
+    "assignmentFilterEvaluated": false,
+    "semantics": "The device object is a member of a group that carries a direct assignment of this policy. Whether the policy is evaluated on that device depends on enrolment, platform, assignment filters, exclusions and check-in state, none of which are evaluated here."
+  },
+  "evaluation": [
+    {
+      "objectId": "045d86ef-ac0e-4133-9422-95e0334e211e",
+      "displayName": "SRV-DB01",
+      "expectedMember": false,
+      "observedMember": false,
+      "state": "CorrectExclusion",
+      "source": "intent",
+      "memberOfDirectlyAssignedGroup": false
+    },
+    {
+      "objectId": "30f111a6-db60-4d34-a9d7-7bd12863905e",
+      "displayName": "LAB-WKS-PC001",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent",
+      "memberOfDirectlyAssignedGroup": true
+    },
+    {
+      "objectId": "24d3e021-5ed7-4052-a553-d24f78fb7eb7",
+      "displayName": "PC-NOPREFIX-002",
+      "expectedMember": true,
+      "observedMember": false,
+      "state": "UnderCoverage",
+      "source": "intent",
+      "memberOfDirectlyAssignedGroup": false
+    },
+    {
+      "objectId": "92a85cb2-6fbf-43bc-b6d8-e4bb3bf295a2",
+      "displayName": "LAB-WKS-TEST99",
+      "expectedMember": false,
+      "observedMember": true,
+      "state": "OverCoverage",
+      "source": "intent",
+      "memberOfDirectlyAssignedGroup": true
+    }
+  ],
+  "proximity": [],
+  "summary": {
+    "Observed": 0,
+    "CorrectExclusion": 1,
+    "CorrectCoverage": 1,
+    "OverCoverage": 1,
+    "NotResolved": 0,
+    "NotInManifest": 0,
+    "UnderCoverage": 1
+  },
+  "assessment": {
+    "completeness": "Complete",
+    "reasons": []
+  },
+  "observation": {
+    "processingState": "On",
+    "processingStatus": "NotRetrieved",
+    "freshness": "NotDemonstrated",
+    "note": "Rule processing is enabled. Whether the current membership has finished converging was not established: the processing status was not retrieved."
+  },
+  "conclusion": {
+    "result": "GapEstablished",
+    "detail": "1 expected in group but absent. 1 in group but not expected.",
+    "gapBreakCondition": "The manifest is outdated or wrong about the expected state of these objects, or the observed membership was not current at generation time.",
+    "policyImpactBoundary": "Other assignment paths, exclusions, assignment filters and enforcement conditions were not evaluated. A gap in this group does not establish that the object receives nothing."
+  },
+  "diagnostics": []
+}

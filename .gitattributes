@@ -1,0 +1,13 @@
+# Default handling: let Git normalize text files in the repository.
+* text=auto
+
+# The shipped intent manifest is hashed, and that hash is recorded in
+# samples/output.json as the provenance of the shipped report. Line-ending
+# normalization would change its bytes and break the check on any platform
+# whose native ending differs from the one it was written with. Stored
+# verbatim, with no conversion in either direction.
+samples/lab-intent.json -text
+
+# Same reasoning for the report: it carries the hash it must agree with, and
+# a diff on it should reflect a different run, not a different platform.
+samples/output.json -text

@@ -1,0 +1,27 @@
+{
+  "description": "Expected population for the dynamic group. The four entries cover the four states of the evaluation matrix.",
+  "complete": true,
+  "asOf": "2026-08-19T00:00:00Z",
+  "objects": [
+    {
+      "displayName": "LAB-SCOPE-0001",
+      "expectedMember": true,
+      "comment": "Matches the naming convention. Should be in the group."
+    },
+    {
+      "displayName": "LABSCOPE-0002",
+      "expectedMember": true,
+      "comment": "Should be covered but the separator is missing. Under-coverage."
+    },
+    {
+      "displayName": "LAB-SCOPE-0003",
+      "expectedMember": false,
+      "comment": "Matches the prefix but should not be in scope. Over-coverage."
+    },
+    {
+      "displayName": "LABSCOPE-0004",
+      "expectedMember": false,
+      "comment": "Not in scope and not matching. Correct exclusion."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "description": "Expected workstation population for lab compliance baseline.",
+  "complete": true,
+  "asOf": "2026-08-19T19:58:13.2682477Z",
+  "objects": [
+    {
+      "id": "30f111a6-db60-4d34-a9d7-7bd12863905e",
+      "displayName": "LAB-WKS-PC001",
+      "expectedMember": true
+    },
+    {
+      "id": "24d3e021-5ed7-4052-a553-d24f78fb7eb7",
+      "displayName": "PC-NOPREFIX-002",
+      "expectedMember": true
+    },
+    {
+      "id": "92a85cb2-6fbf-43bc-b6d8-e4bb3bf295a2",
+      "displayName": "LAB-WKS-TEST99",
+      "expectedMember": false
+    },
+    {
+      "id": "045d86ef-ac0e-4133-9422-95e0334e211e",
+      "displayName": "SRV-DB01",
+      "expectedMember": false
+    }
+  ]
+}
