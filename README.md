@@ -37,11 +37,11 @@ A proven gap, an incomplete manifest and a membership snapshot of unknown freshn
 `Stale` rule processing is not enabled, so the retrieved membership may predate the current rule.
 `NotDemonstrated` rule processing is enabled, but convergence was not verified.
 
-Freshness is never asserted as good. `membershipRuleProcessingState` set to `On` only states that processing is enabled; Entra tracks convergence separately (`Evaluating`, `Processing`, `Update complete`, `Processing error`, `Not started`). This version does not retrieve that status, so it reports `NotDemonstrated` rather than claiming the snapshot has converged.
+Freshness is never asserted as good. `membershipRuleProcessingState` set to `On` only states that processing is enabled; Entra tracks convergence separately (`Evaluating`, `Processing`, `Update complete`, `Processing error`, `Update paused`, `Not started`). This version does not retrieve that status, so it reports `NotDemonstrated` rather than claiming the snapshot has converged.
 
 A gap that has been proven does not disappear because the rest of the population could not be assessed. `GapEstablished` with `Partial` completeness is a normal and useful result. Conversely `NoGapEstablished` reads as an absence of gap in the retrieved snapshot, not as a guarantee about a converged one.
 
-`CoverageNotDemonstrable` is not a degraded mode. It is a first-class result, and probably the most frequent. A report stating that the organisation cannot demonstrate which population a control covers is stronger than a list of misnamed objects, and it resists contradiction better.
+`CoverageNotDemonstrable` is not a degraded mode. It is a first-class result. A report stating that the organisation cannot demonstrate which population a control covers is stronger than a list of misnamed objects, and it resists contradiction better.
 
 All conclusions are bounded to the analyzed path. The report never states that an object is unprotected, only that it is not a member of this group. Other assignment paths are not evaluated.
 
@@ -131,7 +131,7 @@ Warnings and notices generated during execution are captured in the `diagnostics
 
 When the membership rule is a single expression using `-startsWith` or `-eq` on `displayName`, the tool looks for objects outside the group whose names are close to the pattern: separator differences, substring matches at the wrong position. These appear in a separate `proximity` section, carry the object's evaluation state when it has one, and are labelled as triage hints, not established findings.
 
-The scan covers every object outside the group, including objects declared in the manifest. The under-covered object is precisely the one most likely to carry a near-miss name.
+The scan covers every object outside the group, including objects declared in the manifest, so that an object is not excluded from it by virtue of having been declared.
 
 Entra dynamic membership string operations are case-insensitive. A case difference does not produce a membership gap and is not flagged.
 
@@ -193,7 +193,7 @@ samples/output.json            The report from that run, against a real tenant.
 
 It records `GapEstablished` with `Complete` completeness and `NotDemonstrated` freshness: one object correctly covered, one under-covered because it does not carry the naming convention, one over-covered because it does, one correctly excluded.
 
-`proximity` is empty in that run, and that is the expected result. `PC-NOPREFIX-002` is under-covered but carries no near-miss form of the prefix: normalized it reads `pcnoprefix002`, which does not begin with `labwks`. Proximity detects separator faults, not names outside the convention. The most common cause of under-coverage produces no hint.
+`proximity` is empty in that run, and that is the expected result. The gap on `PC-NOPREFIX-002` is established by the intent manifest; the heuristic cannot explain it, because the name carries no near-miss form of the prefix for it to match on. See the Proximity detection section above. The absence of a hint says nothing about whether a gap exists.
 
 The provenance claim is verifiable. `intentSource.sha256` is the SHA-256 of `samples/lab-intent.json` as shipped. The hash covers bytes, not content: that manifest was written on Windows with CRLF line endings, and the same content written with LF hashes differently. A hash comparison is only meaningful against the same writing platform.
 
