@@ -117,6 +117,13 @@ Write-Host ''
 # ── 0. Cleanup inventory, written first and updated as we go ────────
 
 $script:cleanupPath = Join-Path $PSScriptRoot 'lab-cleanup.json'
+
+# An existing inventory is the only record of objects a previous run may have left
+# in the tenant. Writing a new one over it would lose that record, so the lab stops.
+if (Test-Path -LiteralPath $script:cleanupPath) {
+    throw "A cleanup inventory already exists at $script:cleanupPath. It may list objects a previous run left in the tenant. Run Remove-LabEnvironment.ps1 first; if those objects are already gone, delete the inventory by hand."
+}
+
 $script:cleanup = [PSCustomObject]@{
     createdAt = (Get-Date).ToUniversalTime().ToString('o')
     groupId   = $null

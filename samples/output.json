@@ -1,13 +1,54 @@
 {
   "metadata": {
-    "toolVersion": "0.1.0",
-    "generatedAt": "2026-08-19T19:58:58.1099887Z",
-    "powerShellVersion": "7.6.5",
+    "schemaVersion": "2",
+    "toolVersion": "0.2.0",
+    "generatedAt": "2026-10-05T07:40:01.0893047Z",
+    "tenantId": "b58ec690-6b8a-4a87-8145-b34c83bda100",
+    "powerShellVersion": "7.6.6",
+    "graphModules": [
+      {
+        "name": "Microsoft.Graph.Authentication",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.DeviceManagement",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.Groups",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.Identity.DirectoryManagement",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.Users",
+        "version": "2.38.0"
+      }
+    ],
     "disclaimer": "Conclusions are bounded to the analyzed path. Other assignment mechanisms were not evaluated."
   },
+  "sources": [
+    {
+      "product": "Microsoft Graph",
+      "apiVersion": "v1.0",
+      "stability": "generally available",
+      "reads": "group, members, directory objects, policy assignment",
+      "retrieved": true
+    },
+    {
+      "product": "Microsoft Graph",
+      "apiVersion": "beta",
+      "stability": "preview",
+      "reads": "membershipRuleProcessingStatus",
+      "retrieved": true
+    }
+  ],
   "group": {
-    "id": "fc189bff-d79f-4880-953d-7e2d5304f0e8",
+    "id": "5ab8649a-2870-47a5-8b5c-53ba5e9e9dc7",
     "displayName": "Lab-Scope-Devices",
+    "createdDateTime": "2026-10-05T06:53:23.0000000Z",
     "membershipRule": "(device.displayName -startsWith \"LAB-WKS-\")",
     "membershipRuleProcessingState": "On",
     "memberCount": 2,
@@ -17,8 +58,8 @@
     "status": "Available",
     "path": ".\\samples\\lab-intent.json",
     "description": "Expected workstation population for lab compliance baseline.",
-    "asOf": "2026-08-19T19:58:13.2682477Z",
-    "sha256": "5F647C7A1088CDF8E852113AF55802043E2C1840BED33B001726D4CB38F10059",
+    "asOf": "2026-10-05T06:53:24.3718533Z",
+    "sha256": "CD7E227389A52F92E04E33C898492E3B88FF5F060162718E31ADE9883A30C9FD",
     "complete": true,
     "declaredObjectCount": 4,
     "resolvedObjectCount": 4,
@@ -26,7 +67,7 @@
     "duplicatesIgnored": 0
   },
   "policy": {
-    "id": "caede6bc-7cdc-438e-848f-77d9e2d3bee5",
+    "id": "a3c3ecb8-3726-48b2-ab8b-ce86df33eb1f",
     "displayName": "Lab-Baseline-Win11",
     "directGroupAssignmentPresent": true,
     "objectType": "device",
@@ -37,16 +78,7 @@
   },
   "evaluation": [
     {
-      "objectId": "045d86ef-ac0e-4133-9422-95e0334e211e",
-      "displayName": "SRV-DB01",
-      "expectedMember": false,
-      "observedMember": false,
-      "state": "CorrectExclusion",
-      "source": "intent",
-      "memberOfDirectlyAssignedGroup": false
-    },
-    {
-      "objectId": "30f111a6-db60-4d34-a9d7-7bd12863905e",
+      "objectId": "4b8c8582-bd95-4dfd-9e09-202652521998",
       "displayName": "LAB-WKS-PC001",
       "expectedMember": true,
       "observedMember": true,
@@ -55,33 +87,47 @@
       "memberOfDirectlyAssignedGroup": true
     },
     {
-      "objectId": "24d3e021-5ed7-4052-a553-d24f78fb7eb7",
-      "displayName": "PC-NOPREFIX-002",
-      "expectedMember": true,
+      "objectId": "86b0f4be-f987-463a-8711-e132fdb67808",
+      "displayName": "SRV-DB01",
+      "expectedMember": false,
       "observedMember": false,
-      "state": "UnderCoverage",
+      "state": "CorrectExclusion",
       "source": "intent",
       "memberOfDirectlyAssignedGroup": false
     },
     {
-      "objectId": "92a85cb2-6fbf-43bc-b6d8-e4bb3bf295a2",
+      "objectId": "8b21ee98-9647-4fd0-bf01-8256badf646a",
       "displayName": "LAB-WKS-TEST99",
       "expectedMember": false,
       "observedMember": true,
       "state": "OverCoverage",
       "source": "intent",
       "memberOfDirectlyAssignedGroup": true
+    },
+    {
+      "objectId": "99b36912-7029-4795-910f-71e1ce35a010",
+      "displayName": "PC-NOPREFIX-002",
+      "expectedMember": true,
+      "observedMember": false,
+      "state": "UnderCoverage",
+      "source": "intent",
+      "memberOfDirectlyAssignedGroup": false
     }
   ],
   "proximity": [],
   "summary": {
-    "Observed": 0,
-    "CorrectExclusion": 1,
-    "CorrectCoverage": 1,
-    "OverCoverage": 1,
-    "NotResolved": 0,
-    "NotInManifest": 0,
-    "UnderCoverage": 1
+    "rowUnit": "object",
+    "rows": {
+      "CorrectCoverage": 1,
+      "UnderCoverage": 1,
+      "OverCoverage": 1,
+      "CorrectExclusion": 1,
+      "NotInManifest": 0,
+      "Observed": 0
+    },
+    "manifestEntries": {
+      "NotResolved": 0
+    }
   },
   "assessment": {
     "completeness": "Complete",
@@ -89,9 +135,12 @@
   },
   "observation": {
     "processingState": "On",
-    "processingStatus": "NotRetrieved",
+    "processingStatus": "Succeeded",
+    "processingError": null,
+    "lastMembershipUpdated": "2026-10-05T06:54:05.0000000Z",
+    "lastMembershipUsable": true,
     "freshness": "NotDemonstrated",
-    "note": "Rule processing is enabled. Whether the current membership has finished converging was not established: the processing status was not retrieved."
+    "note": "Rule processing is enabled and its last run succeeded (last membership change: 2026-10-05T06:54:05.0000000Z). Convergence of this snapshot was not independently established."
   },
   "conclusion": {
     "result": "GapEstablished",

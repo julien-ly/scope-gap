@@ -26,7 +26,7 @@ A proven gap, an incomplete manifest and a membership snapshot of unknown freshn
 **Conclusion.**
 `GapEstablished` at least one object is under-covered or over-covered.
 `NoGapEstablished` the manifest is complete, every entry resolved, and every object in its expected state.
-`CoverageNotDemonstrable` no gap was proven, and the assessment could not cover the whole population.
+`CoverageNotDemonstrable` no gap was proven, and coverage cannot be demonstrated: the assessment could not cover the whole population, or the membership predates the current rule.
 
 **Assessment completeness**, a property of the manifest.
 `Complete` manifest declared complete and fully resolved.
@@ -34,10 +34,14 @@ A proven gap, an incomplete manifest and a membership snapshot of unknown freshn
 `Absent` no manifest provided.
 
 **Observation freshness**, a property of the membership snapshot.
-`Stale` rule processing is not enabled, so the retrieved membership may predate the current rule.
-`NotDemonstrated` rule processing is enabled, but convergence was not verified.
+`Stale` rule processing is not enabled, or the current rule failed to evaluate. Either way the retrieved membership predates the current rule.
+`NotDemonstrated` rule processing is enabled and did not fail, but convergence of the snapshot was not verified.
 
-Freshness is never asserted as good. `membershipRuleProcessingState` set to `On` only states that processing is enabled; Entra tracks convergence separately (`Evaluating`, `Processing`, `Update complete`, `Processing error`, `Update paused`, `Not started`). This version does not retrieve that status, so it reports `NotDemonstrated` rather than claiming the snapshot has converged.
+Freshness is never asserted as good, not even when the last processing run succeeded. `membershipRuleProcessingState` set to `On` only states that processing is enabled. Whether the current rule was evaluated, and whether that evaluation failed, is in `membershipRuleProcessingStatus`, which Microsoft Graph documents on the beta endpoint and returns only on an explicit `$select`. The report records the status as read (`observation.processingStatus`), the error message when there is one, and the last membership change. If the status cannot be read, `processingStatus` is `NotRetrieved`, a diagnostic says why, and nothing is concluded from it.
+
+**A failed rule freezes the group.** When the current rule fails to evaluate, the group keeps the membership of its last successful evaluation and stops following the rule: objects that now match the intent are not added. A rule can reach that state without any write being rejected, by being saved while processing is paused and resumed afterwards. A gap observed on such a group is still a gap, reported as `GapEstablished` with a `RuleProcessingFailed` diagnostic and a break condition stating that waiting will not close it. An absence of gap on such a group is not demonstrated coverage: the population matches by inertia, and the report concludes `CoverageNotDemonstrable`.
+
+**The last membership change is a date only when it can be one.** The service returns placeholder values in that field, including after processing is paused and resumed. A value earlier than the creation of the group, by more than an hour of tolerance for clock differences, is impossible: the report keeps it raw and sets `lastMembershipUsable` to `false`. The test does not rely on a list of known placeholder values, which are not documented.
 
 A gap that has been proven does not disappear because the rest of the population could not be assessed. `GapEstablished` with `Partial` completeness is a normal and useful result. Conversely `NoGapEstablished` reads as an absence of gap in the retrieved snapshot, not as a guarantee about a converged one.
 
@@ -55,7 +59,7 @@ The tool becomes redundant when the platform natively compares observed dynamic-
 
 PowerShell 7 or later. Microsoft Graph PowerShell SDK modules: `Microsoft.Graph.Groups`, `Microsoft.Graph.Identity.DirectoryManagement`, `Microsoft.Graph.DeviceManagement`, `Microsoft.Graph.Users`. Install them at a single matching version; mixed versions of the SDK fail to load.
 
-**Analyzer, read-only.** `Group.Read.All`, `Device.Read.All`, `User.Read.All`, `DeviceManagementConfiguration.Read.All`. Nothing more; the analyzer never writes.
+**Analyzer, read-only.** `Group.Read.All`, `Device.Read.All`, `User.Read.All`, `DeviceManagementConfiguration.Read.All`. Nothing more; the analyzer never writes. The processing status is read from the beta endpoint with the same `Group.Read.All`.
 
 **Lab scripts, write, test tenant only.** `Directory.AccessAsUser.All`, `Group.ReadWrite.All`, `DeviceManagementConfiguration.ReadWrite.All`, plus a directory role on the signed-in account. Intune Administrator is the simplest choice. See the Lab section for why `Device.ReadWrite.All` is not enough.
 
@@ -79,9 +83,16 @@ Get-MembershipGap -GroupId '<group-object-id>' -PolicyId '<policy-id>' -IntentPa
 
 # Write the report to a file
 Get-MembershipGap -GroupId '<group-object-id>' -IntentPath samples/intent.json -OutputPath report.json
+
+# Or run the file directly, with the same parameters
+./Get-MembershipGap.ps1 -GroupId '<group-object-id>' -IntentPath samples/intent.json -OutputPath report.json
 ```
 
+Run directly without parameters, the file says how to use it instead of doing nothing.
+
 The output is a JSON object. The terminal displays a summary; this is not a second format.
+
+The report declares `metadata.schemaVersion`, which is `2` since version 0.2.0, along with the tenant, the PowerShell version and the Microsoft Graph modules loaded in the session. `sources` names the API version behind each read: `v1.0` for the group, its members, the directory objects and the policy assignment, `beta` for the processing status, with whether that read succeeded. `summary.rows` counts evaluation rows, one per object as stated by `summary.rowUnit`; `summary.manifestEntries` counts manifest entries, which produce no row when they fail to resolve. The two are different units and are not meant to be added together.
 
 ## Intent manifest
 
@@ -161,6 +172,8 @@ The compliance policy calls later in the script do not carry the same contract. 
 
 The cleanup inventory is written before anything is created and updated after each object, so a failure part-way through still leaves a complete list of what exists. The removal script deletes that inventory only once every object has been removed or confirmed absent; if a deletion fails for any other reason, the inventory is kept, because it is the only record of what remains.
 
+For the same reason, the lab refuses to start when an inventory is already present: writing a new one over it would lose the record of what a previous run may have left. Run `Remove-LabEnvironment.ps1` first.
+
 The lab shipped here is device-based. The analyzer is not: its user path is exercised against a separately prepared dynamic user group, and the mechanism, the matrix and the conclusions are identical on both.
 
 ## Limits
@@ -172,6 +185,8 @@ No claim about enforcement. Only membership, and the presence of a direct group 
 Assignment filters are detected and reported, never evaluated.
 
 Objects resolved by `displayName` are skipped when several objects share the name.
+
+The processing status comes from a beta endpoint. If it changes or disappears, the report falls back to `NotRetrieved` and says so; it never infers a status it could not read.
 
 ## Structure
 
@@ -189,9 +204,11 @@ samples/output.json            The report from that run, against a real tenant.
 
 ## Recorded run
 
-`samples/output.json` is not illustrative. It is the report produced by one execution against a real tenant on 19 August 2026, over the four device objects the lab creates, with the compliance policy assigned to the group. The lab ran end to end with no manual step: the objects, the assignment through the assign action, the read-back confirmation and the manifest all came from `New-LabEnvironment.ps1`.
+`samples/output.json` is not illustrative. It is the report produced by one execution of version 0.2.0 against a real tenant on 5 October 2026, over the four device objects the lab creates, with the compliance policy assigned to the group. The lab ran end to end with no manual step: the objects, the assignment through the assign action, the read-back confirmation and the manifest all came from `New-LabEnvironment.ps1`.
 
-It records `GapEstablished` with `Complete` completeness and `NotDemonstrated` freshness: one object correctly covered, one under-covered because it does not carry the naming convention, one over-covered because it does, one correctly excluded.
+It records `GapEstablished` with `Complete` completeness and `NotDemonstrated` freshness: one object correctly covered, one under-covered because it does not carry the naming convention, one over-covered because it does, one correctly excluded. The processing status reads `Succeeded`, and the last membership change, 42 seconds after the group was created, is a usable date. Freshness still stays `NotDemonstrated`: a last run that succeeded does not establish that the snapshot has converged.
+
+An earlier read of another lab group, 34 seconds after its creation, found the same four states while processing was still `Running`, with a placeholder in the last membership change. It is not the recorded run. A gap read while processing is running cannot be attributed to the rule alone, and the report of that read said so in its break condition.
 
 `proximity` is empty in that run, and that is the expected result. The gap on `PC-NOPREFIX-002` is established by the intent manifest; the heuristic cannot explain it, because the name carries no near-miss form of the prefix for it to match on. See the Proximity detection section above. The absence of a hint says nothing about whether a gap exists.
 

@@ -93,6 +93,23 @@ Describe 'Get-MembershipGap' {
             } }
         }
 
+        # Responses of the beta endpoint, as Invoke-MgGraphRequest returns them with
+        # -OutputType HashTable.
+        $script:statusSucceeded = @{
+            id = 'g-user'
+            membershipRuleProcessingStatus = @{
+                status = 'Succeeded'; errorMessage = $null; lastMembershipUpdated = '2026-09-01T10:00:00Z'
+            }
+        }
+        $script:statusFailed = @{
+            id = 'g-user'
+            membershipRuleProcessingStatus = @{
+                status = 'Failed'
+                errorMessage = 'Membership updates could not be evaluated: unsupported property.'
+                lastMembershipUpdated = '0001-01-01T00:00:00Z'
+            }
+        }
+
         $script:dir = Join-Path $TestDrive 'intent'
         New-Item -ItemType Directory -Path $script:dir -Force | Out-Null
 
@@ -140,6 +157,7 @@ Describe 'Get-MembershipGap' {
         Mock Get-MgDevice { $script:objects }
         Mock Get-MgDeviceManagementDeviceCompliancePolicy { $script:policy }
         Mock Get-MgDeviceManagementDeviceCompliancePolicyAssignment { @($script:assignment) }
+        Mock Invoke-MgGraphRequest { $script:statusSucceeded }
     }
 
     Context 'four states, user group' {
@@ -180,8 +198,8 @@ Describe 'Get-MembershipGap' {
 
         It 'produces the same four states on a device group' {
             $r = Get-MembershipGap -GroupId 'g-dev' -IntentPath $script:fullManifest
-            $r.summary.UnderCoverage | Should -Be 1
-            $r.summary.OverCoverage  | Should -Be 1
+            $r.summary.rows.UnderCoverage | Should -Be 1
+            $r.summary.rows.OverCoverage  | Should -Be 1
         }
 
         It 'uses device semantics on the policy' {
@@ -200,7 +218,7 @@ Describe 'Get-MembershipGap' {
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:gapPlusUnresolved
             $r.conclusion.result       | Should -Be 'GapEstablished'
             $r.assessment.completeness | Should -Be 'Partial'
-            $r.summary.NotResolved     | Should -Be 1
+            $r.summary.manifestEntries.NotResolved     | Should -Be 1
         }
     }
 
@@ -214,8 +232,8 @@ Describe 'Get-MembershipGap' {
 
         It 'classifies unlisted members as NotInManifest, never OverCoverage' {
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:partialNoGap
-            $r.summary.NotInManifest | Should -Be 1
-            $r.summary.OverCoverage  | Should -Be 0
+            $r.summary.rows.NotInManifest | Should -Be 1
+            $r.summary.rows.OverCoverage  | Should -Be 0
         }
     }
 
@@ -249,7 +267,7 @@ Describe 'Get-MembershipGap' {
 
         It 'does not fall back to displayName when an explicit id is wrong' {
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:badId
-            $r.summary.NotResolved | Should -Be 1
+            $r.summary.manifestEntries.NotResolved | Should -Be 1
             $r.diagnostics | Where-Object code -EQ 'IntentObjectNotResolved' | Should -Not -BeNullOrEmpty
         }
     }
@@ -311,7 +329,7 @@ Describe 'Get-MembershipGap' {
         It 'reports NotDemonstrated freshness when the rule is On' {
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
             $r.observation.freshness        | Should -Be 'NotDemonstrated'
-            $r.observation.processingStatus | Should -Be 'NotRetrieved'
+            $r.observation.processingStatus | Should -Be 'Succeeded'
             $r.assessment.completeness      | Should -Be 'Complete'
         }
 
@@ -366,7 +384,7 @@ Describe 'Get-MembershipGap' {
 
         It 'treats an identical duplicate as inert, not as a resolution failure' {
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:dupManifest
-            $r.summary.NotResolved     | Should -Be 0
+            $r.summary.manifestEntries.NotResolved     | Should -Be 0
             $r.assessment.completeness | Should -Be 'Complete'
             $r.diagnostics | Where-Object code -EQ 'IntentEntryDuplicate' | Should -Not -BeNullOrEmpty
         }
@@ -419,6 +437,205 @@ Describe 'Get-MembershipGap' {
                    MembershipRule = $null; MembershipRuleProcessingState = $null }
             }
             { Get-MembershipGap -GroupId 'g-static' } | Should -Throw '*not a dynamic group*'
+        }
+    }
+
+    Context 'rule processing status, read from the beta endpoint' {
+
+        It 'reads the status from the beta endpoint with an explicit select' {
+            $null = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            Should -Invoke Invoke-MgGraphRequest -Times 1 -Exactly -ParameterFilter {
+                $Uri -like '*/beta/groups/g-user*' -and $Uri -like '*$select=*membershipRuleProcessingStatus*'
+            }
+        }
+
+        It 'keeps freshness NotDemonstrated when the last run succeeded' {
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.processingStatus | Should -Be 'Succeeded'
+            $r.observation.freshness        | Should -Be 'NotDemonstrated'
+            $r.conclusion.result            | Should -Be 'NoGapEstablished'
+        }
+
+        It 'keeps the gap and names the failure when processing failed' {
+            Mock Invoke-MgGraphRequest { $script:statusFailed }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:fullManifest
+            $r.conclusion.result            | Should -Be 'GapEstablished'
+            $r.summary.rows.UnderCoverage   | Should -Be 1
+            $r.observation.processingStatus | Should -Be 'Failed'
+            $r.observation.processingError  | Should -BeLike '*unsupported property*'
+            $r.observation.freshness        | Should -Be 'Stale'
+            $r.conclusion.gapBreakCondition | Should -BeLike '*will not close by waiting*'
+            $r.diagnostics | Where-Object code -EQ 'RuleProcessingFailed' | Should -Not -BeNullOrEmpty
+        }
+
+        It 'does not establish coverage on a failed group whose population still matches' {
+            # The case version 0.1 got wrong: a frozen membership that happens to match
+            # the manifest was reported as NoGapEstablished.
+            Mock Invoke-MgGraphRequest { $script:statusFailed }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.conclusion.result       | Should -Be 'CoverageNotDemonstrable'
+            $r.conclusion.detail       | Should -BeLike '*no longer maintained*'
+            $r.assessment.completeness | Should -Be 'Complete'
+        }
+
+        It 'reports NotRetrieved and a diagnostic when the status cannot be read' {
+            Mock Invoke-MgGraphRequest { throw 'simulated read failure' }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.processingStatus | Should -Be 'NotRetrieved'
+            $r.observation.freshness        | Should -Be 'NotDemonstrated'
+            $r.conclusion.result            | Should -Be 'NoGapEstablished'
+            (@($r.sources) | Where-Object apiVersion -EQ 'beta').retrieved | Should -Be $false
+            $r.diagnostics | Where-Object code -EQ 'ProcessingStatusNotRetrieved' | Should -Not -BeNullOrEmpty
+        }
+
+        It 'reports NotReported when the service returns no status' {
+            Mock Invoke-MgGraphRequest { @{ id = 'g-user'; membershipRuleProcessingStatus = $null } }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.processingStatus | Should -Be 'NotReported'
+            (@($r.sources) | Where-Object apiVersion -EQ 'beta').retrieved | Should -Be $true
+        }
+    }
+
+    Context 'the last membership change is a date only when it can be one' {
+
+        BeforeEach {
+            Mock Get-MgGroup {
+                $g = $script:userGroup.Clone()
+                $g.CreatedDateTime = [datetime]::new(2026, 9, 23, 10, 53, 0, [System.DateTimeKind]::Utc)
+                $g
+            }
+        }
+
+        It 'marks a value earlier than the group itself as unusable and keeps it raw' {
+            Mock Invoke-MgGraphRequest { $script:statusFailed }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.lastMembershipUsable  | Should -BeOfType [bool]
+            $r.observation.lastMembershipUsable  | Should -Be $false
+            $r.observation.lastMembershipUpdated | Should -BeLike '0001-01-01*'
+        }
+
+        It 'treats another placeholder the same way, without a list of known values' {
+            Mock Invoke-MgGraphRequest {
+                @{ membershipRuleProcessingStatus = @{ status = 'NotStarted'; errorMessage = $null; lastMembershipUpdated = '2000-01-01T08:00:00Z' } }
+            }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.lastMembershipUsable | Should -BeOfType [bool]
+            $r.observation.lastMembershipUsable | Should -Be $false
+        }
+
+        It 'accepts a value later than the creation of the group' {
+            Mock Invoke-MgGraphRequest {
+                @{ membershipRuleProcessingStatus = @{ status = 'Succeeded'; errorMessage = $null; lastMembershipUpdated = '2026-09-23T10:53:34Z' } }
+            }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.lastMembershipUsable | Should -BeOfType [bool]
+            $r.observation.lastMembershipUsable | Should -Be $true
+        }
+
+        It 'does not decide when the creation of the group is unknown' {
+            Mock Get-MgGroup { $script:userGroup }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.observation.lastMembershipUsable | Should -BeNullOrEmpty
+        }
+    }
+
+    Context 'report envelope, schema 2' {
+
+        It 'declares the schema version, the tool version and the tenant' {
+            Mock Get-MgContext { @{ TenantId = 't-0001' } }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            $r.metadata.schemaVersion | Should -Be '2'
+            $r.metadata.toolVersion   | Should -Be '0.2.0'
+            $r.metadata.tenantId      | Should -Be 't-0001'
+        }
+
+        It 'records the Graph modules loaded in the session' {
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            @($r.metadata.graphModules).Count   | Should -BeGreaterThan 0
+            @($r.metadata.graphModules)[0].name | Should -BeLike 'Microsoft.Graph.*'
+        }
+
+        It 'keeps rows and manifest entries apart in the summary' {
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:gapPlusUnresolved
+            $r.summary.rowUnit                     | Should -Be 'object'
+            $r.summary.manifestEntries.NotResolved | Should -Be 1
+            $r.summary.rows.PSObject.Properties.Name | Should -Not -Contain 'NotResolved'
+        }
+
+        It 'names the API version behind each source' {
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
+            @($r.sources).apiVersion | Should -Contain 'v1.0'
+            @($r.sources).apiVersion | Should -Contain 'beta'
+        }
+    }
+
+    Context 'independence from the caller strict mode' {
+
+        BeforeAll {
+            $script:idOnly = Join-Path $script:dir 'id-only.json'
+            '{ "complete": true, "objects": [ { "id": "o-001", "expectedMember": true } ] }' | Set-Content $script:idOnly
+        }
+
+        It 'reads a manifest whose entries carry only an id under Set-StrictMode -Version Latest' {
+            Set-StrictMode -Version Latest
+            try {
+                $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:idOnly
+            }
+            finally {
+                Set-StrictMode -Off
+            }
+            $r.intentSource.resolvedObjectCount | Should -Be 1
+        }
+    }
+
+    Context 'running the file directly' {
+
+        BeforeAll {
+            $script:analyzerPath = (Resolve-Path "$PSScriptRoot/../Get-MembershipGap.ps1").Path
+        }
+
+        # Run with &, the file gets a script scope of its own. A mock body that reads
+        # $script:userGroup then resolves it in that new scope, finds nothing, and the
+        # analyzer receives $null. The mocks of this context therefore return literal
+        # objects and read no script-scoped variable.
+        BeforeEach {
+            Mock Get-MgGroup {
+                @{
+                    Id = 'g-user'; DisplayName = 'Lab-Scope-Users'
+                    MembershipRule = '(user.displayName -startsWith "LAB-SCOPE-")'
+                    MembershipRuleProcessingState = 'On'; GroupTypes = @('DynamicMembership')
+                }
+            }
+            Mock Get-MgGroupMember {
+                @(
+                    @{ Id = 'o-001'; AdditionalProperties = @{ displayName = 'LAB-SCOPE-0001' } }
+                    @{ Id = 'o-003'; AdditionalProperties = @{ displayName = 'LAB-SCOPE-0003' } }
+                )
+            }
+            Mock Get-MgUser {
+                @(
+                    @{ Id = 'o-001'; DisplayName = 'LAB-SCOPE-0001' }
+                    @{ Id = 'o-002'; DisplayName = 'LABSCOPE-0002' }
+                    @{ Id = 'o-003'; DisplayName = 'LAB-SCOPE-0003' }
+                    @{ Id = 'o-004'; DisplayName = 'LABSCOPE-0004' }
+                )
+            }
+            Mock Invoke-MgGraphRequest {
+                @{ membershipRuleProcessingStatus = @{ status = 'Succeeded'; errorMessage = $null; lastMembershipUpdated = '2026-09-01T10:00:00Z' } }
+            }
+        }
+
+        It 'runs the analysis with the parameters it is given' {
+            $r = & $script:analyzerPath -GroupId 'g-user' -IntentPath $script:noGapManifest 6>$null
+            $r.conclusion.result | Should -Be 'NoGapEstablished'
+            # Named parameters must reach the function by name. Passed positionally,
+            # '-GroupId' itself would become the group id.
+            Should -Invoke Get-MgGroup -Times 1 -Exactly -ParameterFilter { $GroupId -eq 'g-user' }
+        }
+
+        It 'says how to use it when it is given no parameter' {
+            $output = & $script:analyzerPath 3>&1
+            ($output | Out-String) | Should -BeLike '*dot-source*'
         }
     }
 }

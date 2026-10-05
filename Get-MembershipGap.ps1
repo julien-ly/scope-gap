@@ -16,8 +16,9 @@
       GapEstablished          At least one object is under-covered or over-covered.
       NoGapEstablished        Every object is resolved, the manifest is complete,
                               and every object is in its expected state.
-      CoverageNotDemonstrable No gap is proven and the assessment could not cover
-                              the whole population.
+      CoverageNotDemonstrable No gap is proven, and coverage cannot be demonstrated:
+                              the assessment could not cover the whole population,
+                              or the membership predates the current rule.
 
     Assessment completeness, a property of the manifest:
       Complete   Manifest declared complete and fully resolved.
@@ -25,11 +26,19 @@
       Absent     No manifest provided.
 
     Observation freshness, a property of the membership snapshot:
-      Stale           Rule processing is not enabled.
-      NotDemonstrated Rule processing is enabled, but convergence was not verified.
+      Stale           Rule processing is not enabled, or the current rule failed
+                      to evaluate. Either way the membership predates the rule.
+      NotDemonstrated Rule processing is enabled and did not fail, but convergence
+                      of the snapshot was not verified.
 
-    Freshness is never asserted as good. The tool does not retrieve the rule
-    processing status, so it does not claim the snapshot has converged.
+    Freshness is never asserted as good, not even when the last processing run
+    succeeded. The processing status is read from the Microsoft Graph beta
+    endpoint. A failed read is reported and never interpreted.
+
+    A group whose rule failed to evaluate keeps the membership of its last
+    successful evaluation and stops following the rule. A gap observed on such a
+    group is still a gap. An absence of gap on such a group is not demonstrated
+    coverage, and is reported as CoverageNotDemonstrable.
 
     A proven gap is not erased by an incomplete assessment. The two are reported
     side by side.
@@ -57,10 +66,15 @@
 .NOTES
     Read-only. Requires:
       Group.Read.All, Device.Read.All, User.Read.All, DeviceManagementConfiguration.Read.All.
+    The processing status is read from the beta endpoint with Group.Read.All.
     Connect with Connect-MgGraph -Scopes before running.
+
+    Either dot-source this file and call Get-MembershipGap, or run the file with
+    the same parameters.
 #>
 
-$script:ToolVersion = '0.1.0'
+$script:ToolVersion   = '0.2.0'
+$script:SchemaVersion = '2'
 
 function Get-MembershipGap {
     [CmdletBinding()]
@@ -74,6 +88,11 @@ function Get-MembershipGap {
 
         [string]$OutputPath
     )
+
+    # The analyzer is tested without strict mode, and its result must not depend on
+    # the mode of whoever calls it. Strict mode inherited from a caller used to make
+    # a valid manifest fail on an entry that carries an id and no displayName.
+    Set-StrictMode -Off
 
     $diagnostics = [System.Collections.ArrayList]::new()
 
@@ -94,7 +113,7 @@ function Get-MembershipGap {
 
     # ── 1. Retrieve and validate the group ──────────────────────────────
 
-    $group = Get-MgGroup -GroupId $GroupId -Property id, displayName, membershipRule, membershipRuleProcessingState, groupTypes -ErrorAction Stop
+    $group = Get-MgGroup -GroupId $GroupId -Property id, displayName, membershipRule, membershipRuleProcessingState, groupTypes, createdDateTime -ErrorAction Stop
 
     if ('DynamicMembership' -notin $group.GroupTypes) {
         throw "Group '$($group.DisplayName)' is not a dynamic group."
@@ -104,6 +123,72 @@ function Get-MembershipGap {
     if ($ruleState -ne 'On') {
         Add-Diagnostic -Severity 'Warning' -Code 'RuleNotActive' -Object $group.DisplayName `
             -Message "Membership rule processing is '$ruleState', not 'On'. Observed membership may not reflect the current rule."
+    }
+
+    # ── 1b. Retrieve the rule processing status (beta) ──────────────────
+    #
+    # membershipRuleProcessingState only states whether processing is enabled.
+    # Whether the current rule was evaluated, and whether that evaluation failed,
+    # is in membershipRuleProcessingStatus, documented on the beta endpoint and
+    # returned only on an explicit $select. A failed read is reported and never
+    # interpreted: the report then reads as if the status had not been requested.
+
+    $processingStatus  = 'NotRetrieved'
+    $processingError   = $null
+    $lastMembershipRaw = $null
+    $statusRetrieved   = $false
+
+    try {
+        $statusResponse = Invoke-MgGraphRequest -Method GET -OutputType HashTable -ErrorAction Stop `
+            -Uri ("https://graph.microsoft.com/beta/groups/$GroupId" + '?$select=id,membershipRuleProcessingStatus')
+        $statusRetrieved = $true
+        $statusObject = Get-OptionalProperty -Object $statusResponse -Name 'membershipRuleProcessingStatus'
+        $statusValue  = Get-OptionalProperty -Object $statusObject -Name 'status'
+        $processingStatus  = if ([string]::IsNullOrEmpty([string]$statusValue)) { 'NotReported' } else { [string]$statusValue }
+        $processingError   = Get-OptionalProperty -Object $statusObject -Name 'errorMessage'
+        $lastMembershipRaw = Get-OptionalProperty -Object $statusObject -Name 'lastMembershipUpdated'
+    }
+    catch {
+        $readFailure = $_.Exception.Message
+        if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $readFailure += ' ' + $_.ErrorDetails.Message }
+        Add-Diagnostic -Severity 'Warning' -Code 'ProcessingStatusNotRetrieved' -Object $group.DisplayName `
+            -Message "The rule processing status could not be read from the beta endpoint, so freshness is reported without it. $readFailure"
+    }
+
+    $processingFailed = ($processingStatus -eq 'Failed')
+    if ($processingFailed) {
+        $failureText = if ($processingError) { "'$processingError'" } else { 'no error message was reported' }
+        Add-Diagnostic -Severity 'Warning' -Code 'RuleProcessingFailed' -Object $group.DisplayName `
+            -Message "Rule processing failed: $failureText. The group keeps the membership of its last successful evaluation and no longer follows its rule."
+    }
+
+    # A last membership change earlier than the group itself is impossible, so it is a
+    # placeholder and not a date. The test is deliberately not a list of the placeholder
+    # values seen so far: they are undocumented. One hour of tolerance absorbs clock
+    # differences between services; the placeholders seen so far are decades off.
+    $lastMembershipText   = $null
+    $lastMembershipDate   = $null
+    $lastMembershipUsable = $null
+    if ($lastMembershipRaw -is [datetime]) {
+        $lastMembershipDate = $lastMembershipRaw.ToUniversalTime()
+        $lastMembershipText = $lastMembershipDate.ToString('o')
+    }
+    elseif (-not [string]::IsNullOrEmpty([string]$lastMembershipRaw)) {
+        $lastMembershipText = [string]$lastMembershipRaw
+        $parsedDate = [datetime]::MinValue
+        $dateStyles = [System.Globalization.DateTimeStyles]::AdjustToUniversal -bor [System.Globalization.DateTimeStyles]::AssumeUniversal
+        if ([datetime]::TryParse($lastMembershipText, [System.Globalization.CultureInfo]::InvariantCulture, $dateStyles, [ref]$parsedDate)) {
+            $lastMembershipDate = $parsedDate
+        }
+    }
+    $groupCreated     = $null
+    $groupCreatedText = $null
+    if ($group.CreatedDateTime) {
+        $groupCreated     = ([datetime]$group.CreatedDateTime).ToUniversalTime()
+        $groupCreatedText = $groupCreated.ToString('o')
+    }
+    if ($null -ne $lastMembershipDate -and $null -ne $groupCreated) {
+        $lastMembershipUsable = ($lastMembershipDate -ge $groupCreated.AddHours(-1))
     }
 
     # ── 2. Determine object type from the rule ──────────────────────────
@@ -184,18 +269,19 @@ function Get-MembershipGap {
         }
 
         $intentComplete    = $intentRaw.complete
-        $intentDescription = $intentRaw.description
+        $intentDescription = Get-OptionalProperty -Object $intentRaw -Name 'description'
+        $intentAsOfRaw     = Get-OptionalProperty -Object $intentRaw -Name 'asOf'
 
         # ConvertFrom-Json turns an ISO 8601 string into a DateTime. ConvertTo-Json
         # writes DateTime back in round-trip ISO 8601, so the JSON artifact is not
         # affected; only the console rendering of the returned object follows the
         # machine's locale. Normalized to UTC ISO 8601 anyway, so that the value is
         # the same in both places and does not depend on how the object is displayed.
-        $intentAsOf = if ($intentRaw.asOf -is [datetime]) {
-            $intentRaw.asOf.ToUniversalTime().ToString('o')
+        $intentAsOf = if ($intentAsOfRaw -is [datetime]) {
+            $intentAsOfRaw.ToUniversalTime().ToString('o')
         }
         else {
-            $intentRaw.asOf
+            $intentAsOfRaw
         }
         $intentStatus      = 'Available'
         $intentEntries     = @($intentRaw.objects)
@@ -204,9 +290,13 @@ function Get-MembershipGap {
         $seenIds = @{}
 
         foreach ($entry in $intentEntries) {
-            $label = if ($entry.displayName) { $entry.displayName } elseif ($entry.id) { $entry.id } else { '(unnamed entry)' }
+            # Both fields are optional in the contract, so they are read without
+            # assuming that they exist.
+            $entryId   = Get-OptionalProperty -Object $entry -Name 'id'
+            $entryName = Get-OptionalProperty -Object $entry -Name 'displayName'
+            $label = if ($entryName) { $entryName } elseif ($entryId) { $entryId } else { '(unnamed entry)' }
 
-            if (-not $entry.id -and -not $entry.displayName) {
+            if (-not $entryId -and -not $entryName) {
                 Add-Diagnostic -Severity 'Warning' -Code 'IntentEntryMalformed' -Object $label `
                     -Message "Intent entry has neither 'id' nor 'displayName'. Skipped."
                 $unresolvedCount++
@@ -221,27 +311,27 @@ function Get-MembershipGap {
 
             $resolved = $null
 
-            if ($entry.id) {
+            if ($entryId) {
                 # An explicit ID is authoritative. No fallback to name: resolving a
                 # different object with the same name would be worse than not resolving.
-                if ($objectIndex.ContainsKey($entry.id)) {
-                    $resolved = $objectIndex[$entry.id]
+                if ($objectIndex.ContainsKey($entryId)) {
+                    $resolved = $objectIndex[$entryId]
                 }
                 else {
                     Add-Diagnostic -Severity 'Warning' -Code 'IntentObjectNotResolved' -Object $label `
-                        -Message "Intent entry '$label' declares id '$($entry.id)' which does not exist in the directory. No fallback to displayName."
+                        -Message "Intent entry '$label' declares id '$entryId' which does not exist in the directory. No fallback to displayName."
                     $unresolvedCount++
                     continue
                 }
             }
             else {
-                $nameMatches = @($allObjects | Where-Object { $_.DisplayName -eq $entry.displayName })
+                $nameMatches = @($allObjects | Where-Object { $_.DisplayName -eq $entryName })
                 if ($nameMatches.Count -eq 1) {
                     $resolved = $nameMatches[0]
                 }
                 elseif ($nameMatches.Count -gt 1) {
                     Add-Diagnostic -Severity 'Warning' -Code 'IntentObjectAmbiguous' -Object $label `
-                        -Message "Multiple objects match displayName '$($entry.displayName)'. Cannot resolve."
+                        -Message "Multiple objects match displayName '$entryName'. Cannot resolve."
                     $unresolvedCount++
                     continue
                 }
@@ -452,23 +542,51 @@ function Get-MembershipGap {
 
     # Axis 2: freshness of the observation. A property of the membership snapshot.
     #
-    # membershipRuleProcessingState only states whether processing is enabled. It does
-    # not state whether the current population has converged. Entra tracks that
-    # separately (Evaluating, Processing, Update complete, Processing error, Not started),
-    # and that status is not retrieved by this version. So freshness is never asserted:
-    # it is either demonstrably stale, or not demonstrated.
-    $freshness = if ($ruleState -ne 'On') { 'Stale' } else { 'NotDemonstrated' }
+    # membershipRuleProcessingState only states whether processing is enabled. The
+    # processing status states whether the current rule was evaluated. Freshness is
+    # never asserted as good, not even after a successful run: it is demonstrably
+    # stale, or not demonstrated.
+    #
+    # A failed evaluation makes the snapshot stale for the same reason a paused rule
+    # does: the retrieved membership predates the current rule. The group keeps the
+    # population of its last successful evaluation, so an absence of gap there is
+    # coverage by inertia, not demonstrated coverage.
+    $freshness = if ($ruleState -ne 'On' -or $processingFailed) { 'Stale' } else { 'NotDemonstrated' }
+
+    $lastMembershipNote = if ($null -eq $lastMembershipText) { 'not reported' }
+    elseif ($lastMembershipUsable -eq $true) { $lastMembershipText }
+    elseif ($lastMembershipUsable -eq $false) { "$lastMembershipText, earlier than the group itself, so a placeholder and not a date" }
+    else { "$lastMembershipText, usability not established" }
+
+    $failureSuffix = if ($processingError) { ": '$processingError'" } else { '' }
+
+    $observationNote = if ($processingFailed) {
+        "Rule processing failed$failureSuffix. The retrieved membership comes from an earlier successful evaluation and is no longer maintained: objects that now match the intent are not added. Waiting will not change it until the rule is corrected."
+    }
+    elseif ($ruleState -ne 'On') {
+        "Membership rule processing state is '$ruleState'. The retrieved membership may predate the current rule."
+    }
+    elseif ($processingStatus -eq 'NotRetrieved') {
+        'Rule processing is enabled. Whether the current membership has finished converging was not established: the processing status could not be read.'
+    }
+    elseif ($processingStatus -eq 'NotReported') {
+        'Rule processing is enabled. The service reported no processing status, so whether the current membership has finished converging was not established.'
+    }
+    elseif ($processingStatus -eq 'Succeeded') {
+        "Rule processing is enabled and its last run succeeded (last membership change: $lastMembershipNote). Convergence of this snapshot was not independently established."
+    }
+    else {
+        "Rule processing is '$processingStatus'. The retrieved membership may not reflect the current rule yet."
+    }
 
     $observation = [PSCustomObject]@{
-        processingState  = $ruleState
-        processingStatus = 'NotRetrieved'
-        freshness        = $freshness
-        note             = if ($freshness -eq 'Stale') {
-            "Membership rule processing state is '$ruleState'. The retrieved membership may predate the current rule."
-        }
-        else {
-            'Rule processing is enabled. Whether the current membership has finished converging was not established: the processing status was not retrieved.'
-        }
+        processingState       = $ruleState
+        processingStatus      = $processingStatus
+        processingError       = $processingError
+        lastMembershipUpdated = $lastMembershipText
+        lastMembershipUsable  = $lastMembershipUsable
+        freshness             = $freshness
+        note                  = $observationNote
     }
 
     $conclusion = if ($hasGap) {
@@ -476,10 +594,19 @@ function Get-MembershipGap {
         if ($counts.UnderCoverage -gt 0) { $parts += "$($counts.UnderCoverage) expected in group but absent" }
         if ($counts.OverCoverage -gt 0) { $parts += "$($counts.OverCoverage) in group but not expected" }
 
+        # When the rule failed to evaluate, the delay reading of the break condition
+        # is wrong: the gap does not close by waiting.
+        $gapBreakCondition = if ($processingFailed) {
+            'The membership is not maintained: rule processing failed and the group keeps the population of its last successful evaluation. The gap will not close by waiting; the rule must be corrected. Independently, the manifest may be outdated or wrong about the expected state of these objects.'
+        }
+        else {
+            'The manifest is outdated or wrong about the expected state of these objects, or the observed membership was not current at generation time.'
+        }
+
         [PSCustomObject]@{
             result               = 'GapEstablished'
             detail               = ($parts -join '. ') + '.'
-            gapBreakCondition    = 'The manifest is outdated or wrong about the expected state of these objects, or the observed membership was not current at generation time.'
+            gapBreakCondition    = $gapBreakCondition
             policyImpactBoundary = 'Other assignment paths, exclusions, assignment filters and enforcement conditions were not evaluated. A gap in this group does not establish that the object receives nothing.'
         }
     }
@@ -489,7 +616,7 @@ function Get-MembershipGap {
 
         [PSCustomObject]@{
             result               = 'CoverageNotDemonstrable'
-            detail               = 'No gap was proven, and the assessment could not cover the whole population. ' + ($reasons -join ' ')
+            detail               = 'No gap was proven, and coverage could not be demonstrated. ' + ($reasons -join ' ')
             gapBreakCondition    = $null
             policyImpactBoundary = $null
         }
@@ -505,16 +632,58 @@ function Get-MembershipGap {
 
     # ── 10. Build and return the report ─────────────────────────────────
 
+    # Rows and manifest entries are different units. An entry that fails to resolve
+    # produces no row, so the two families are kept apart and never summed.
+    $summary = [PSCustomObject]@{
+        rowUnit         = 'object'
+        rows            = [PSCustomObject]@{
+            CorrectCoverage  = $counts.CorrectCoverage
+            UnderCoverage    = $counts.UnderCoverage
+            OverCoverage     = $counts.OverCoverage
+            CorrectExclusion = $counts.CorrectExclusion
+            NotInManifest    = $counts.NotInManifest
+            Observed         = $counts.Observed
+        }
+        manifestEntries = [PSCustomObject]@{
+            NotResolved = $counts.NotResolved
+        }
+    }
+
+    $context = Get-MgContext
+    $graphModules = @(Get-Module -Name 'Microsoft.Graph.*' | Sort-Object Name, Version | ForEach-Object {
+            [PSCustomObject]@{ name = $_.Name; version = $_.Version.ToString() }
+        })
+
     $report = [PSCustomObject]@{
         metadata     = [PSCustomObject]@{
+            schemaVersion     = $script:SchemaVersion
             toolVersion       = $script:ToolVersion
             generatedAt       = (Get-Date).ToUniversalTime().ToString('o')
+            tenantId          = if ($context) { $context.TenantId } else { $null }
             powerShellVersion = $PSVersionTable.PSVersion.ToString()
+            graphModules      = $graphModules
             disclaimer        = 'Conclusions are bounded to the analyzed path. Other assignment mechanisms were not evaluated.'
         }
+        sources      = @(
+            [PSCustomObject]@{
+                product    = 'Microsoft Graph'
+                apiVersion = 'v1.0'
+                stability  = 'generally available'
+                reads      = 'group, members, directory objects, policy assignment'
+                retrieved  = $true
+            }
+            [PSCustomObject]@{
+                product    = 'Microsoft Graph'
+                apiVersion = 'beta'
+                stability  = 'preview'
+                reads      = 'membershipRuleProcessingStatus'
+                retrieved  = $statusRetrieved
+            }
+        )
         group        = [PSCustomObject]@{
             id                            = $group.Id
             displayName                   = $group.DisplayName
+            createdDateTime               = $groupCreatedText
             membershipRule                = $group.MembershipRule
             membershipRuleProcessingState = $ruleState
             memberCount                   = $memberIndex.Count
@@ -535,7 +704,7 @@ function Get-MembershipGap {
         policy       = $policyInfo
         evaluation   = $evaluation.ToArray()
         proximity    = $proximity.ToArray()
-        summary      = [PSCustomObject]$counts
+        summary      = $summary
         assessment   = [PSCustomObject]@{
             completeness = $assessmentCompleteness
             reasons      = $incompletenessReasons
@@ -589,6 +758,12 @@ function Get-MembershipGap {
             default { 'DarkYellow' }
         }
     )
+    Write-Host "  Processing:   $processingStatus" -ForegroundColor $(
+        if ($processingFailed) { 'Yellow' } else { 'DarkGray' }
+    )
+    if ($processingFailed -and $processingError) {
+        Write-Host "                $processingError" -ForegroundColor DarkYellow
+    }
     Write-Host "  Freshness:    $freshness" -ForegroundColor $(
         if ($freshness -eq 'Stale') { 'Yellow' } else { 'DarkGray' }
     )
@@ -610,6 +785,32 @@ function Get-MembershipGap {
 # ═══════════════════════════════════════════════════════════════════════
 #  Internal helpers
 # ═══════════════════════════════════════════════════════════════════════
+
+function Get-OptionalProperty {
+    <#
+    .SYNOPSIS
+        Reads a property that may be absent, from a dictionary or an object.
+
+    .DESCRIPTION
+        Manifest entries carry optional fields, and Graph responses read as
+        hashtables may omit keys. A direct property access on an absent field
+        throws under strict mode. This reads presence first and returns $null
+        when the field is not there.
+    #>
+    param(
+        $Object,
+        [string]$Name
+    )
+
+    if ($null -eq $Object) { return $null }
+    if ($Object -is [System.Collections.IDictionary]) {
+        if ($Object.Contains($Name)) { return $Object[$Name] }
+        return $null
+    }
+    $property = $Object.PSObject.Properties[$Name]
+    if ($null -ne $property) { return $property.Value }
+    return $null
+}
 
 function Get-RulePrefix {
     <#
@@ -682,4 +883,26 @@ function Get-ProximityHint {
     }
 
     return $null
+}
+
+
+# ═══════════════════════════════════════════════════════════════════════
+#  Direct execution
+# ═══════════════════════════════════════════════════════════════════════
+#
+# This file defines Get-MembershipGap. Run as a script instead of being
+# dot-sourced, it used to define the function in a scope that disappeared at
+# once, and to ignore its arguments without a word. It now runs the analysis
+# when it is given parameters, and says how to use it when it is given none.
+# Splatting the automatic $args variable keeps the parameter names.
+
+if ($MyInvocation.InvocationName -ne '.') {
+    if ($args.Count -gt 0) {
+        Get-MembershipGap @args
+    }
+    else {
+        Write-Warning ("Get-MembershipGap.ps1 defines the Get-MembershipGap function. " +
+            "Either dot-source it ('. ./Get-MembershipGap.ps1') and call Get-MembershipGap, " +
+            "or run it with parameters ('./Get-MembershipGap.ps1 -GroupId <id> [-IntentPath <path>] [-OutputPath <path>]').")
+    }
 }
