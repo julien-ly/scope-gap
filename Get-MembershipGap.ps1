@@ -18,7 +18,8 @@
                               and every object is in its expected state.
       CoverageNotDemonstrable No gap is proven, and coverage cannot be demonstrated:
                               the assessment could not cover the whole population,
-                              or the membership predates the current rule.
+                              or the membership is not established as an evaluation
+                              of the current rule.
 
     Assessment completeness, a property of the manifest:
       Complete   Manifest declared complete and fully resolved.
@@ -26,19 +27,21 @@
       Absent     No manifest provided.
 
     Observation freshness, a property of the membership snapshot:
-      Stale           Rule processing is not enabled, or the current rule failed
-                      to evaluate. Either way the membership predates the rule.
-      NotDemonstrated Rule processing is enabled and did not fail, but convergence
-                      of the snapshot was not verified.
+      Stale           Rule processing is not enabled, or its last run reported a
+                      failure. Either way the membership is not established as an
+                      evaluation of the current rule.
+      NotDemonstrated Rule processing is enabled and its last run did not report a
+                      failure, but convergence of the snapshot was not verified.
 
     Freshness is never asserted as good, not even when the last processing run
     succeeded. The processing status is read from the Microsoft Graph beta
     endpoint. A failed read is reported and never interpreted.
 
-    A group whose rule failed to evaluate keeps the membership of its last
-    successful evaluation and stops following the rule. A gap observed on such a
-    group is still a gap. An absence of gap on such a group is not demonstrated
-    coverage, and is reported as CoverageNotDemonstrable.
+    When the last processing run reported a failure, a gap observed on the group
+    is still a gap, reported with the processing error. An absence of gap is not
+    demonstrated coverage, and is reported as CoverageNotDemonstrable. The status
+    alone does not say where the membership comes from, nor whether the failure
+    clears without a change to the rule, so the report does not assume either.
 
     A proven gap is not erased by an incomplete assessment. The two are reported
     side by side.
@@ -73,7 +76,7 @@
     the same parameters.
 #>
 
-$script:ToolVersion   = '0.2.0'
+$script:ToolVersion   = '0.2.1'
 $script:SchemaVersion = '2'
 
 function Get-MembershipGap {
@@ -157,9 +160,11 @@ function Get-MembershipGap {
 
     $processingFailed = ($processingStatus -eq 'Failed')
     if ($processingFailed) {
+        # The status states that the last run failed. It does not state the cause, nor
+        # where the current members come from, nor whether the failure will clear.
         $failureText = if ($processingError) { "'$processingError'" } else { 'no error message was reported' }
         Add-Diagnostic -Severity 'Warning' -Code 'RuleProcessingFailed' -Object $group.DisplayName `
-            -Message "Rule processing failed: $failureText. The group keeps the membership of its last successful evaluation and no longer follows its rule."
+            -Message "Rule processing reported a failure: $failureText. Successful evaluation of the current rule is not established; the observed membership may not reflect it."
     }
 
     # A last membership change earlier than the group itself is impossible, so it is a
@@ -547,10 +552,11 @@ function Get-MembershipGap {
     # never asserted as good, not even after a successful run: it is demonstrably
     # stale, or not demonstrated.
     #
-    # A failed evaluation makes the snapshot stale for the same reason a paused rule
-    # does: the retrieved membership predates the current rule. The group keeps the
-    # population of its last successful evaluation, so an absence of gap there is
-    # coverage by inertia, not demonstrated coverage.
+    # A failed run makes the snapshot stale for the same reason a paused rule does:
+    # the retrieved membership is not established as an evaluation of the current
+    # rule. An absence of gap there is therefore not demonstrated coverage. Nothing
+    # more is inferred from the status: in the lab, one failure left the previous
+    # population in place, another left a group that had never been populated empty.
     $freshness = if ($ruleState -ne 'On' -or $processingFailed) { 'Stale' } else { 'NotDemonstrated' }
 
     $lastMembershipNote = if ($null -eq $lastMembershipText) { 'not reported' }
@@ -561,7 +567,7 @@ function Get-MembershipGap {
     $failureSuffix = if ($processingError) { ": '$processingError'" } else { '' }
 
     $observationNote = if ($processingFailed) {
-        "Rule processing failed$failureSuffix. The retrieved membership comes from an earlier successful evaluation and is no longer maintained: objects that now match the intent are not added. Waiting will not change it until the rule is corrected."
+        "Rule processing reported a failure$failureSuffix. The retrieved membership remains observable, but successful evaluation of the current rule is not established. The status alone does not say whether the failure clears without a change to the rule."
     }
     elseif ($ruleState -ne 'On') {
         "Membership rule processing state is '$ruleState'. The retrieved membership may predate the current rule."
@@ -594,10 +600,10 @@ function Get-MembershipGap {
         if ($counts.UnderCoverage -gt 0) { $parts += "$($counts.UnderCoverage) expected in group but absent" }
         if ($counts.OverCoverage -gt 0) { $parts += "$($counts.OverCoverage) in group but not expected" }
 
-        # When the rule failed to evaluate, the delay reading of the break condition
-        # is wrong: the gap does not close by waiting.
+        # When the last run failed, a pending update is no longer the only reading of
+        # the break condition, and the status alone cannot say which reading applies.
         $gapBreakCondition = if ($processingFailed) {
-            'The membership is not maintained: rule processing failed and the group keeps the population of its last successful evaluation. The gap will not close by waiting; the rule must be corrected. Independently, the manifest may be outdated or wrong about the expected state of these objects.'
+            'Rule processing reported a failure, so the observed membership may not reflect the current rule. The status alone does not say whether the failure clears without a change to the rule. Independently, the manifest may be outdated or wrong about the expected state of these objects.'
         }
         else {
             'The manifest is outdated or wrong about the expected state of these objects, or the observed membership was not current at generation time.'

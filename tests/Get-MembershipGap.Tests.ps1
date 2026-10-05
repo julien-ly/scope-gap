@@ -464,8 +464,28 @@ Describe 'Get-MembershipGap' {
             $r.observation.processingStatus | Should -Be 'Failed'
             $r.observation.processingError  | Should -BeLike '*unsupported property*'
             $r.observation.freshness        | Should -Be 'Stale'
-            $r.conclusion.gapBreakCondition | Should -BeLike '*will not close by waiting*'
+            $r.conclusion.gapBreakCondition | Should -BeLike '*reported a failure*'
             $r.diagnostics | Where-Object code -EQ 'RuleProcessingFailed' | Should -Not -BeNullOrEmpty
+        }
+
+        It 'says no more about a failure than the status establishes' {
+            # Failed carries no cause. A group that was never populated can fail too,
+            # so the report must not claim an earlier successful evaluation, nor that
+            # the rule has to change for the failure to clear.
+            Mock Invoke-MgGraphRequest { $script:statusFailed }
+            $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:fullManifest
+            $texts = @(
+                $r.observation.note
+                $r.conclusion.gapBreakCondition
+                ($r.diagnostics | Where-Object code -EQ 'RuleProcessingFailed').message
+            )
+            $texts.Count | Should -Be 3
+            foreach ($t in $texts) {
+                $t | Should -Not -BeNullOrEmpty
+                $t | Should -Not -BeLike '*earlier successful evaluation*'
+                $t | Should -Not -BeLike '*must be corrected*'
+                $t | Should -Not -BeLike '*will not close*'
+            }
         }
 
         It 'does not establish coverage on a failed group whose population still matches' {
@@ -474,7 +494,7 @@ Describe 'Get-MembershipGap' {
             Mock Invoke-MgGraphRequest { $script:statusFailed }
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
             $r.conclusion.result       | Should -Be 'CoverageNotDemonstrable'
-            $r.conclusion.detail       | Should -BeLike '*no longer maintained*'
+            $r.conclusion.detail       | Should -BeLike '*not established*'
             $r.assessment.completeness | Should -Be 'Complete'
         }
 
@@ -545,7 +565,7 @@ Describe 'Get-MembershipGap' {
             Mock Get-MgContext { @{ TenantId = 't-0001' } }
             $r = Get-MembershipGap -GroupId 'g-user' -IntentPath $script:noGapManifest
             $r.metadata.schemaVersion | Should -Be '2'
-            $r.metadata.toolVersion   | Should -Be '0.2.0'
+            $r.metadata.toolVersion   | Should -Be '0.2.1'
             $r.metadata.tenantId      | Should -Be 't-0001'
         }
 

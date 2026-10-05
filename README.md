@@ -26,7 +26,7 @@ A proven gap, an incomplete manifest and a membership snapshot of unknown freshn
 **Conclusion.**
 `GapEstablished` at least one object is under-covered or over-covered.
 `NoGapEstablished` the manifest is complete, every entry resolved, and every object in its expected state.
-`CoverageNotDemonstrable` no gap was proven, and coverage cannot be demonstrated: the assessment could not cover the whole population, or the membership predates the current rule.
+`CoverageNotDemonstrable` no gap was proven, and coverage cannot be demonstrated: the assessment could not cover the whole population, or the membership is not established as an evaluation of the current rule.
 
 **Assessment completeness**, a property of the manifest.
 `Complete` manifest declared complete and fully resolved.
@@ -34,12 +34,12 @@ A proven gap, an incomplete manifest and a membership snapshot of unknown freshn
 `Absent` no manifest provided.
 
 **Observation freshness**, a property of the membership snapshot.
-`Stale` rule processing is not enabled, or the current rule failed to evaluate. Either way the retrieved membership predates the current rule.
-`NotDemonstrated` rule processing is enabled and did not fail, but convergence of the snapshot was not verified.
+`Stale` rule processing is not enabled, or its last run reported a failure. Either way the retrieved membership is not established as an evaluation of the current rule.
+`NotDemonstrated` rule processing is enabled and its last run did not report a failure, but convergence of the snapshot was not verified.
 
 Freshness is never asserted as good, not even when the last processing run succeeded. `membershipRuleProcessingState` set to `On` only states that processing is enabled. Whether the current rule was evaluated, and whether that evaluation failed, is in `membershipRuleProcessingStatus`, which Microsoft Graph documents on the beta endpoint and returns only on an explicit `$select`. The report records the status as read (`observation.processingStatus`), the error message when there is one, and the last membership change. If the status cannot be read, `processingStatus` is `NotRetrieved`, a diagnostic says why, and nothing is concluded from it.
 
-**A failed rule freezes the group.** When the current rule fails to evaluate, the group keeps the membership of its last successful evaluation and stops following the rule: objects that now match the intent are not added. A rule can reach that state without any write being rejected, by being saved while processing is paused and resumed afterwards. A gap observed on such a group is still a gap, reported as `GapEstablished` with a `RuleProcessingFailed` diagnostic and a break condition stating that waiting will not close it. An absence of gap on such a group is not demonstrated coverage: the population matches by inertia, and the report concludes `CoverageNotDemonstrable`.
+**A failed rule can leave the group frozen.** A rule can be saved while processing is paused, without the rejection the same rule gets when processing is on, and fail once processing resumes. In a lab, a group whose rule failed with `unsupported property` kept the same eight members it had before, and did not add a new user who matched its previous rule; an identical group with a working rule added that user, and eight days later the failed group still had not. That is one failure, observed once. The processing status alone does not say where the membership comes from, nor whether a failure clears without a change to the rule, so the report assumes neither. A gap on a failed group is reported as `GapEstablished`, with a `RuleProcessingFailed` diagnostic carrying the error message. An absence of gap is reported as `CoverageNotDemonstrable`: the members may still match the manifest, but successful evaluation of the current rule is not established.
 
 **The last membership change is a date only when it can be one.** The service returns placeholder values in that field, including after processing is paused and resumed. A value earlier than the creation of the group, by more than an hour of tolerance for clock differences, is impossible: the report keeps it raw and sets `lastMembershipUsable` to `false`. The test does not rely on a list of known placeholder values, which are not documented.
 
