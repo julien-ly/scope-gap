@@ -1,0 +1,186 @@
+{
+  "metadata": {
+    "schemaVersion": "2",
+    "toolVersion": "0.2.1",
+    "generatedAt": "2026-10-05T08:22:39.4524646Z",
+    "tenantId": "b58ec690-6b8a-4a87-8145-b34c83bda100",
+    "powerShellVersion": "7.6.6",
+    "graphModules": [
+      {
+        "name": "Microsoft.Graph.Authentication",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.DeviceManagement",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.Groups",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.Identity.DirectoryManagement",
+        "version": "2.38.0"
+      },
+      {
+        "name": "Microsoft.Graph.Users",
+        "version": "2.38.0"
+      }
+    ],
+    "disclaimer": "Conclusions are bounded to the analyzed path. Other assignment mechanisms were not evaluated."
+  },
+  "sources": [
+    {
+      "product": "Microsoft Graph",
+      "apiVersion": "v1.0",
+      "stability": "generally available",
+      "reads": "group, members, directory objects, policy assignment",
+      "retrieved": true
+    },
+    {
+      "product": "Microsoft Graph",
+      "apiVersion": "beta",
+      "stability": "preview",
+      "reads": "membershipRuleProcessingStatus",
+      "retrieved": true
+    }
+  ],
+  "group": {
+    "id": "f7073036-b497-4fff-8455-c61b69208384",
+    "displayName": "dynlab-edit-20260923113815-test",
+    "createdDateTime": "2026-09-23T11:38:17.0000000Z",
+    "membershipRule": "user.propertyThatDoesNotExist -eq null",
+    "membershipRuleProcessingState": "On",
+    "memberCount": 8,
+    "objectType": "user"
+  },
+  "intentSource": {
+    "status": "Available",
+    "path": "scopegap-intent-dynlab-edit.json",
+    "description": "Population attendue pour les deux groupes du lab de modification (run 20260923113815) : tous les utilisateurs du tenant, service vide, y compris dynlab-user9. Meme manifeste pour le temoin et pour le groupe test.",
+    "asOf": "2026-09-26T09:15:00.0000000Z",
+    "sha256": "AFEC9725C7AA603941E9DFFFE987DC580A3C6681444677ED06823049627EFC17",
+    "complete": true,
+    "declaredObjectCount": 9,
+    "resolvedObjectCount": 9,
+    "notResolved": 0,
+    "duplicatesIgnored": 0
+  },
+  "policy": null,
+  "evaluation": [
+    {
+      "objectId": "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+      "displayName": "dynlab-user9",
+      "expectedMember": true,
+      "observedMember": false,
+      "state": "UnderCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+      "displayName": "user-02",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "5173b363-50b4-42eb-9aec-bdf805033c6f",
+      "displayName": "user-03",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+      "displayName": "user-06",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+      "displayName": "user-05",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "713a26dd-c446-4afa-b989-8463bf3f8666",
+      "displayName": "user-04",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+      "displayName": "user-07",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "076e3f09-e9b9-4d73-9f20-706e093773dc",
+      "displayName": "user-01",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "dcb06df7-c781-4584-b05a-e818990e10f8",
+      "displayName": "user-08",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    }
+  ],
+  "proximity": [],
+  "summary": {
+    "rowUnit": "object",
+    "rows": {
+      "CorrectCoverage": 8,
+      "UnderCoverage": 1,
+      "OverCoverage": 0,
+      "CorrectExclusion": 0,
+      "NotInManifest": 0,
+      "Observed": 0
+    },
+    "manifestEntries": {
+      "NotResolved": 0
+    }
+  },
+  "assessment": {
+    "completeness": "Complete",
+    "reasons": []
+  },
+  "observation": {
+    "processingState": "On",
+    "processingStatus": "Failed",
+    "processingError": "Membership updates could not be evaluated: unsupported property.",
+    "lastMembershipUpdated": "0001-01-01T00:00:00.0000000Z",
+    "lastMembershipUsable": false,
+    "freshness": "Stale",
+    "note": "Rule processing reported a failure: 'Membership updates could not be evaluated: unsupported property.'. The retrieved membership remains observable, but successful evaluation of the current rule is not established. The status alone does not say whether the failure clears without a change to the rule."
+  },
+  "conclusion": {
+    "result": "GapEstablished",
+    "detail": "1 expected in group but absent.",
+    "gapBreakCondition": "Rule processing reported a failure, so the observed membership may not reflect the current rule. The status alone does not say whether the failure clears without a change to the rule. Independently, the manifest may be outdated or wrong about the expected state of these objects.",
+    "policyImpactBoundary": "Other assignment paths, exclusions, assignment filters and enforcement conditions were not evaluated. A gap in this group does not establish that the object receives nothing."
+  },
+  "diagnostics": [
+    {
+      "severity": "Warning",
+      "code": "RuleProcessingFailed",
+      "object": "dynlab-edit-20260923113815-test",
+      "message": "Rule processing reported a failure: 'Membership updates could not be evaluated: unsupported property.'. Successful evaluation of the current rule is not established; the observed membership may not reflect it."
+    }
+  ]
+}

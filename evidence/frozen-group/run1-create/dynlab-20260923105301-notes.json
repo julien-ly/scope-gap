@@ -1,0 +1,37 @@
+[
+  {
+    "at": "2026-09-23T10:59:49.6032421Z",
+    "atLocal": "2026-09-23 12:59:49 +02:00",
+    "kind": "portal-save",
+    "group": "dynlab-20260923105301-portal-invalid",
+    "observation": "Creation refusee : Impossible de creer le groupe. Unsupported property 'propertyThatDoesNotExist'. Aucun groupe cree."
+  },
+  {
+    "at": "2026-09-23T11:00:19.4946941Z",
+    "atLocal": "2026-09-23 13:00:19 +02:00",
+    "kind": "portal-overview",
+    "group": "dynlab-20260923105301-B-invalid",
+    "observation": "..."
+  },
+  {
+    "at": "2026-09-23T11:02:16.4351087Z",
+    "atLocal": "2026-09-23 13:02:16 +02:00",
+    "kind": "portal-overview",
+    "group": "dynlab-20260923105301-B-invalid",
+    "observation": "<etat de traitement affiche, et presence ou non d'une alerte en haut de page>"
+  },
+  {
+    "at": "2026-09-23T11:06:48.7431858Z",
+    "atLocal": "2026-09-23 13:06:48 +02:00",
+    "kind": "portal-overview",
+    "group": "dynlab-20260923105301-B-invalid",
+    "observation": "Bandeau d'alerte : Membership updates could not be evaluated: unsupported property. Etat de traitement des regles dynamiques : Echec. Derniere modification d'appartenance : 01/01/1 00:09. Suspendre le traitement : desactive. Membres : 0."
+  },
+  {
+    "at": "2026-09-23T11:08:04.8571187Z",
+    "atLocal": "2026-09-23 13:08:04 +02:00",
+    "kind": "other",
+    "group": "dynlab-probe-A-invalid",
+    "observation": "Sonde POST /v1.0/groups en On, regle invalide : HTTP 400, code DynamicGroupQueryParseError, message Unsupported property 'propertyThatDoesNotExist'. request-id eb75676e-b9aa-483c-8caf-06a51691a5ae. Rien cree."
+  }
+]

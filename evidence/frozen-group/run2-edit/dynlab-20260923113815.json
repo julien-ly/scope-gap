@@ -1,0 +1,1736 @@
+{
+  "schema": "dynlab-edit/1",
+  "runId": "20260923113815",
+  "tenantId": "b58ec690-6b8a-4a87-8145-b34c83bda100",
+  "account": "lab-operator",
+  "graphAuthModule": "2.39.0",
+  "rules": {
+    "valid": "user.department -eq null",
+    "invalid": "user.propertyThatDoesNotExist -eq null"
+  },
+  "method": "Suspension par PATCH membershipRuleProcessingState = Paused. Modification de la regle faite a la main dans le portail. Le script etablit si une regle est stockee, jamais qu'elle a ete refusee.",
+  "groups": [
+    {
+      "label": "control",
+      "role": "temoin, reste en On",
+      "displayName": "dynlab-edit-20260923113815-control",
+      "groupId": "528826b3-d258-45e9-8d84-9db15addba12"
+    },
+    {
+      "label": "test",
+      "role": "cas teste, passe en Paused",
+      "displayName": "dynlab-edit-20260923113815-test",
+      "groupId": "f7073036-b497-4fff-8455-c61b69208384"
+    }
+  ],
+  "phases": {
+    "setup": {
+      "control": {
+        "postAt": "2026-09-23T11:38:15.1596937Z",
+        "accepted": true,
+        "postError": null,
+        "postErrorDetail": null,
+        "wait": {
+          "startAt": "2026-09-23T11:38:15.1596937Z",
+          "observations": [
+            {
+              "at": "2026-09-23T11:38:16.2823357Z",
+              "phase": "setup-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-23T11:38:36.5085949Z",
+              "phase": "setup-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-23T11:38:56.7230373Z",
+              "phase": "setup-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-23T11:39:16.9435341Z",
+              "phase": "setup-wait",
+              "fieldPresent": true,
+              "status": "Succeeded",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+              "readError": null
+            }
+          ],
+          "terminalStatus": "Succeeded",
+          "terminalAt": "2026-09-23T11:39:16.9435341Z",
+          "terminalError": null,
+          "secondsToObservedTerminal": 62
+        },
+        "before": {
+          "phase": "setup-before",
+          "at": "2026-09-23T11:39:37.1981671Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-23T11:39:37.2983666Z",
+            "phase": "setup-before",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-23T11:39:37.3986078Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "pauseAt": null,
+        "pauseOk": null,
+        "pauseError": null,
+        "afterPause": null,
+        "afterPauseDelayed": null
+      },
+      "test": {
+        "postAt": "2026-09-23T11:38:15.7589781Z",
+        "accepted": true,
+        "postError": null,
+        "postErrorDetail": null,
+        "wait": {
+          "startAt": "2026-09-23T11:38:15.7589781Z",
+          "observations": [
+            {
+              "at": "2026-09-23T11:39:17.0418951Z",
+              "phase": "setup-wait",
+              "fieldPresent": true,
+              "status": "Succeeded",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+              "readError": null
+            }
+          ],
+          "terminalStatus": "Succeeded",
+          "terminalAt": "2026-09-23T11:39:17.0418951Z",
+          "terminalError": null,
+          "secondsToObservedTerminal": 61
+        },
+        "before": {
+          "phase": "setup-before",
+          "at": "2026-09-23T11:39:37.4981387Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-23T11:39:37.59042Z",
+            "phase": "setup-before",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-23T11:39:37.681698Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "pauseAt": "2026-09-23T11:39:37.7760598Z",
+        "pauseOk": true,
+        "pauseError": null,
+        "afterPause": {
+          "phase": "setup-after-pause",
+          "at": "2026-09-23T11:39:37.972832Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "Paused",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-23T11:39:38.0638861Z",
+            "phase": "setup-after-pause",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-23T11:39:38.1651991Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "afterPauseDelayed": {
+          "phase": "setup-after-pause-30s",
+          "at": "2026-09-23T11:40:08.2581392Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "Paused",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-23T11:40:08.3422604Z",
+            "phase": "setup-after-pause-30s",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-23T11:40:08.5540998Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      }
+    },
+    "checks": [
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-23T11:44:14.4060583Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-23T11:44:14.5504616Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-23T11:44:14.7502695Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-23T11:44:14.8646435Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "Paused",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-23T11:44:14.948642Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "NotStarted",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-23T11:44:15.1656133Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-24T07:42:47.7775169Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-24T07:42:47.9363128Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-24T07:42:48.2636195Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-24T07:42:48.3732987Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "Paused",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-24T07:42:48.4619224Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "NotStarted",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-24T07:42:48.7075389Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:02:10.2360826Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:02:10.4237638Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:02:10.624707Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:02:10.7176427Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:02:10.8107871Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:02:11.0069108Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:09:38.7932048Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:09:38.9281271Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:09:39.1215933Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:09:39.2115067Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:09:39.3064789Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:09:39.4974761Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:10:09.6207153Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:10:09.7121136Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:10:09.9078709Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:10:10.0126012Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:10:10.1084748Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:10:10.3086506Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:10:40.4322869Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:10:40.5172344Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:10:40.7256159Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:10:40.8143787Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:10:40.9049935Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:10:41.137845Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:11:11.2412673Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:11:11.3313355Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:11:11.5357656Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:11:11.6238352Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:11:11.7122379Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:11:11.9009393Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:11:42.030238Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:11:42.123147Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:11:42.2176794Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:11:42.3027177Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:11:42.3970457Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:11:42.4898054Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:12:12.6318026Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:12:12.7262043Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:12:12.8204568Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:12:12.9276537Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:12:13.0148587Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:12:13.228052Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:12:43.3538787Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:12:43.438521Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:12:43.6394868Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:12:43.7218514Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:12:43.810067Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:12:44.0025318Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:13:14.3453851Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:13:14.4384583Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:13:14.6420955Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:13:14.7363434Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:13:14.8264883Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:13:15.0616755Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:13:45.179768Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:13:45.2749592Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:13:45.3858362Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:13:45.4749886Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:13:45.5574423Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:13:45.6544706Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      {
+        "control": {
+          "phase": "check",
+          "at": "2026-09-26T09:14:15.7639680Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:14:15.8468164Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-26T09:09:15Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:14:15.9421174Z",
+            "memberCount": 9,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "test": {
+          "phase": "check",
+          "at": "2026-09-26T09:14:16.0262479Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-26T09:14:16.1076694Z",
+            "phase": "check",
+            "fieldPresent": true,
+            "status": "Failed",
+            "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+            "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-26T09:14:16.2424867Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      }
+    ],
+    "resume": {
+      "test": {
+        "preCheck": {
+          "phase": "resume-precheck",
+          "at": "2026-09-24T07:43:09.9543277Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "Paused",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-24T07:43:10.0455667Z",
+            "phase": "resume-precheck",
+            "fieldPresent": true,
+            "status": "NotStarted",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-24T07:43:10.3186589Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "decision": "resume",
+        "patchAt": "2026-09-24T07:43:10.4142062Z",
+        "patchOk": true,
+        "patchError": null,
+        "wait": {
+          "startAt": "2026-09-24T07:43:10.4142062Z",
+          "observations": [
+            {
+              "at": "2026-09-24T07:43:10.607279Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:43:30.8411819Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:43:51.0787369Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:44:11.2990891Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:44:31.4234761Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:44:51.5441903Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:45:11.6502024Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:45:31.8251168Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:45:51.9354859Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:46:12.0506059Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:46:32.1513232Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:46:52.2514267Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:47:12.4822657Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:47:32.7209946Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:47:52.9669416Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:48:13.1903875Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:48:33.2963179Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:48:53.4155114Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:49:13.5586311Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:49:33.6782272Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:49:53.7933009Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:50:13.9104893Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:50:34.0157009Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:50:54.128868Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:51:14.3465863Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:51:34.5753472Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:51:54.6879713Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:52:14.9132796Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:52:35.0322695Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:52:55.2695043Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:53:15.3769799Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:53:35.4882357Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:53:55.6963164Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:54:15.9261828Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:54:36.1989429Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:54:56.4538927Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:55:16.6760777Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:55:36.9568137Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:55:57.0586475Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:56:17.1625257Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:56:37.2693337Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:56:57.3892522Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:57:17.4973704Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:57:37.5969786Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:57:57.7271103Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            },
+            {
+              "at": "2026-09-24T07:58:17.8922707Z",
+              "phase": "resume-wait",
+              "fieldPresent": true,
+              "status": "NotStarted",
+              "errorMessage": null,
+              "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+              "readError": null
+            }
+          ],
+          "terminalStatus": null,
+          "terminalAt": null,
+          "terminalError": null,
+          "secondsToObservedTerminal": null
+        },
+        "after": {
+          "phase": "resume-after",
+          "at": "2026-09-24T07:58:38.015128Z",
+          "rule": "user.propertyThatDoesNotExist -eq null",
+          "ruleIsInvalid": true,
+          "ruleIsValid": false,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-24T07:58:38.1198707Z",
+            "phase": "resume-after",
+            "fieldPresent": true,
+            "status": "NotStarted",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-24T07:58:38.2203693Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        }
+      },
+      "control": {
+        "preCheck": {
+          "phase": "resume-precheck",
+          "at": "2026-09-24T07:58:38.320241Z",
+          "rule": "user.department -eq null",
+          "ruleIsInvalid": false,
+          "ruleIsValid": true,
+          "state": "On",
+          "groupReadError": null,
+          "status": {
+            "at": "2026-09-24T07:58:38.4087758Z",
+            "phase": "resume-precheck",
+            "fieldPresent": true,
+            "status": "Succeeded",
+            "errorMessage": null,
+            "lastMembershipUpdated": "2026-09-23T11:39:13Z",
+            "readError": null
+          },
+          "members": {
+            "readAt": "2026-09-24T07:58:38.5080613Z",
+            "memberCount": 8,
+            "ids": [
+              "076e3f09-e9b9-4d73-9f20-706e093773dc",
+              "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+              "5173b363-50b4-42eb-9aec-bdf805033c6f",
+              "713a26dd-c446-4afa-b989-8463bf3f8666",
+              "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+              "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+              "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+              "dcb06df7-c781-4584-b05a-e818990e10f8"
+            ],
+            "pages": 1,
+            "readError": null
+          }
+        },
+        "decision": "regle invalide non stockee",
+        "wait": null,
+        "after": null
+      }
+    }
+  },
+  "verdict": {
+    "writtenAt": "2026-09-24T07:58:38.6126038Z",
+    "write": "Regle invalide stockee sur le groupe en Paused, non stockee sur le temoin en On. Difference liee a l'etat de traitement, pour une modification dans le portail et pour cette regle. L'exclusivite de l'API est refutee. Le script etablit le stockage, pas le refus : le refus se lit dans les notes du portail.",
+    "persistence": {
+      "test": {
+        "observed": true,
+        "terminalStatus": null,
+        "terminalError": null,
+        "countBefore": 8,
+        "countAfter": 8,
+        "sameMembers": true,
+        "note": "Appartenance identique a celle d'avant la modification."
+      },
+      "control": {
+        "observed": false,
+        "note": "Pas de releve apres traitement pour ce groupe."
+      }
+    },
+    "pausedStatus": {
+      "documented": "La ressource group en beta indique que membershipRuleProcessingStatus est null quand le traitement est suspendu.",
+      "observed": {
+        "state": "Paused",
+        "fieldPresent": true,
+        "status": "Succeeded"
+      }
+    }
+  }
+}

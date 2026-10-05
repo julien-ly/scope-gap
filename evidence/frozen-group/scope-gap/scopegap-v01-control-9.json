@@ -1,0 +1,130 @@
+{
+  "metadata": {
+    "toolVersion": "0.1.0",
+    "generatedAt": "2026-10-04T16:45:53.7008450Z",
+    "powerShellVersion": "7.6.6",
+    "disclaimer": "Conclusions are bounded to the analyzed path. Other assignment mechanisms were not evaluated."
+  },
+  "group": {
+    "id": "528826b3-d258-45e9-8d84-9db15addba12",
+    "displayName": "dynlab-edit-20260923113815-control",
+    "membershipRule": "user.department -eq null",
+    "membershipRuleProcessingState": "On",
+    "memberCount": 9,
+    "objectType": "user"
+  },
+  "intentSource": {
+    "status": "Available",
+    "path": "scopegap-intent-dynlab-edit.json",
+    "description": "Population attendue pour les deux groupes du lab de modification (run 20260923113815) : tous les utilisateurs du tenant, service vide, y compris dynlab-user9. Meme manifeste pour le temoin et pour le groupe test.",
+    "asOf": "2026-09-26T09:15:00.0000000Z",
+    "sha256": "AFEC9725C7AA603941E9DFFFE987DC580A3C6681444677ED06823049627EFC17",
+    "complete": true,
+    "declaredObjectCount": 9,
+    "resolvedObjectCount": 9,
+    "notResolved": 0,
+    "duplicatesIgnored": 0
+  },
+  "policy": null,
+  "evaluation": [
+    {
+      "objectId": "076e3f09-e9b9-4d73-9f20-706e093773dc",
+      "displayName": "user-01",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "9ab19793-7d2f-43d5-a65b-65d6f147f849",
+      "displayName": "dynlab-user9",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "dcb06df7-c781-4584-b05a-e818990e10f8",
+      "displayName": "user-08",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+      "displayName": "user-07",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+      "displayName": "user-05",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+      "displayName": "user-02",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+      "displayName": "user-06",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "5173b363-50b4-42eb-9aec-bdf805033c6f",
+      "displayName": "user-03",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    },
+    {
+      "objectId": "713a26dd-c446-4afa-b989-8463bf3f8666",
+      "displayName": "user-04",
+      "expectedMember": true,
+      "observedMember": true,
+      "state": "CorrectCoverage",
+      "source": "intent"
+    }
+  ],
+  "proximity": [],
+  "summary": {
+    "CorrectCoverage": 9,
+    "UnderCoverage": 0,
+    "NotResolved": 0,
+    "NotInManifest": 0,
+    "CorrectExclusion": 0,
+    "OverCoverage": 0,
+    "Observed": 0
+  },
+  "assessment": {
+    "completeness": "Complete",
+    "reasons": []
+  },
+  "observation": {
+    "processingState": "On",
+    "processingStatus": "NotRetrieved",
+    "freshness": "NotDemonstrated",
+    "note": "Rule processing is enabled. Whether the current membership has finished converging was not established: the processing status was not retrieved."
+  },
+  "conclusion": {
+    "result": "NoGapEstablished",
+    "detail": "No gap was observed in the retrieved membership snapshot. The manifest was complete and fully resolved. Membership processing freshness was not independently established.",
+    "gapBreakCondition": "The manifest is outdated, or it declares itself complete while omitting part of the real population, or the membership had not finished converging when it was read.",
+    "policyImpactBoundary": null
+  },
+  "diagnostics": []
+}

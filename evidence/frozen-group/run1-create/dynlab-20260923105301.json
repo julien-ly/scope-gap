@@ -1,0 +1,259 @@
+{
+  "schema": "dynlab/1",
+  "runId": "20260923105301",
+  "phase": "complete",
+  "writtenAt": "2026-09-23T10:54:05.9500922Z",
+  "tenantId": "b58ec690-6b8a-4a87-8145-b34c83bda100",
+  "account": "lab-operator",
+  "graphAuthModule": "2.39.0",
+  "requestPath": "Invoke-MgGraphRequest POST /v1.0/groups ; statut lu sur /beta/groups/{id}?$select=membershipRuleProcessingStatus",
+  "rules": {
+    "invalid": "user.propertyThatDoesNotExist -eq null",
+    "valid": "user.department -eq null"
+  },
+  "pollIntervalSeconds": 30,
+  "timeoutMinutes": 30,
+  "measurementNote": "secondsToObservedTerminal mesure le delai jusqu'a la premiere lecture qui observe un statut terminal, a la granularite du polling. Le statut a pu etre atteint plus tot.",
+  "reference": {
+    "date": "2026-08-17",
+    "method": "New-MgGroup, groupes crees en Paused puis passes en On",
+    "observed": "Creation acceptee sans erreur. Statut NotStarted plusieurs minutes. Regle invalide : Failed, errorMessage \"Membership updates could not be evaluated: unsupported property.\" Controle valide : Succeeded.",
+    "status": "Reference du carnet, a confronter. Non reobservee par ce script."
+  },
+  "notesFile": "dynlab-20260923105301-notes.json",
+  "groups": [
+    {
+      "label": "A-invalid",
+      "path": "A",
+      "pathDesc": "On a la creation",
+      "role": "test",
+      "displayName": "dynlab-20260923105301-A-invalid",
+      "ruleSent": "user.propertyThatDoesNotExist -eq null",
+      "initialState": "On",
+      "postAt": "2026-09-23T10:53:02.000167Z",
+      "accepted": false,
+      "groupId": null,
+      "postError": "Response status code does not indicate success: BadRequest (Bad Request).",
+      "storedReadAttempts": [],
+      "storedReadAt": null,
+      "ruleStored": null,
+      "ruleExactMatch": null,
+      "stateStored": null,
+      "storedReadNote": null,
+      "patchAt": null,
+      "patchError": null,
+      "evaluationStartAt": null,
+      "observations": [],
+      "terminalStatus": null,
+      "terminalAt": null,
+      "terminalError": null,
+      "secondsToObservedTerminal": null
+    },
+    {
+      "label": "A-valid",
+      "path": "A",
+      "pathDesc": "On a la creation",
+      "role": "control",
+      "displayName": "dynlab-20260923105301-A-valid",
+      "ruleSent": "user.department -eq null",
+      "initialState": "On",
+      "postAt": "2026-09-23T10:53:02.6270955Z",
+      "accepted": true,
+      "groupId": "65b6cfac-6d7c-4bdc-af7f-7ab28f2c3962",
+      "postError": null,
+      "storedReadAttempts": [],
+      "storedReadAt": "2026-09-23T10:53:03.283594Z",
+      "ruleStored": "user.department -eq null",
+      "ruleExactMatch": true,
+      "stateStored": "On",
+      "storedReadNote": null,
+      "patchAt": null,
+      "patchError": null,
+      "evaluationStartAt": "2026-09-23T10:53:02.6270955Z",
+      "observations": [
+        {
+          "at": "2026-09-23T10:53:03.3792497Z",
+          "phase": "after-write",
+          "fieldPresent": true,
+          "status": "NotStarted",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+          "readError": null
+        },
+        {
+          "at": "2026-09-23T10:53:05.0942672Z",
+          "phase": "poll",
+          "fieldPresent": true,
+          "status": "NotStarted",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+          "readError": null
+        },
+        {
+          "at": "2026-09-23T10:53:35.4978919Z",
+          "phase": "poll",
+          "fieldPresent": true,
+          "status": "Succeeded",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2026-09-23T10:53:34Z",
+          "readError": null
+        }
+      ],
+      "terminalStatus": "Succeeded",
+      "terminalAt": "2026-09-23T10:53:35.4978919Z",
+      "terminalError": null,
+      "secondsToObservedTerminal": 33
+    },
+    {
+      "label": "B-invalid",
+      "path": "B",
+      "pathDesc": "Paused puis On (17 aout)",
+      "role": "test",
+      "displayName": "dynlab-20260923105301-B-invalid",
+      "ruleSent": "user.propertyThatDoesNotExist -eq null",
+      "initialState": "Paused",
+      "postAt": "2026-09-23T10:53:03.6147445Z",
+      "accepted": true,
+      "groupId": "fb8809ce-a7f1-48dd-90b7-827c11fe88d6",
+      "postError": null,
+      "storedReadAttempts": [],
+      "storedReadAt": "2026-09-23T10:53:03.9102821Z",
+      "ruleStored": "user.propertyThatDoesNotExist -eq null",
+      "ruleExactMatch": true,
+      "stateStored": "Paused",
+      "storedReadNote": null,
+      "patchAt": "2026-09-23T10:53:04.1995019Z",
+      "patchError": null,
+      "evaluationStartAt": "2026-09-23T10:53:04.1995019Z",
+      "observations": [
+        {
+          "at": "2026-09-23T10:53:04.0886982Z",
+          "phase": "after-write",
+          "fieldPresent": true,
+          "status": "NotStarted",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+          "readError": null
+        },
+        {
+          "at": "2026-09-23T10:53:05.2744639Z",
+          "phase": "poll",
+          "fieldPresent": true,
+          "status": "NotStarted",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+          "readError": null
+        },
+        {
+          "at": "2026-09-23T10:53:35.6058469Z",
+          "phase": "poll",
+          "fieldPresent": true,
+          "status": "Failed",
+          "errorMessage": "Membership updates could not be evaluated: unsupported property.",
+          "lastMembershipUpdated": "0001-01-01T00:00:00Z",
+          "readError": null
+        }
+      ],
+      "terminalStatus": "Failed",
+      "terminalAt": "2026-09-23T10:53:35.6058469Z",
+      "terminalError": "Membership updates could not be evaluated: unsupported property.",
+      "secondsToObservedTerminal": 31
+    },
+    {
+      "label": "B-valid",
+      "path": "B",
+      "pathDesc": "Paused puis On (17 aout)",
+      "role": "control",
+      "displayName": "dynlab-20260923105301-B-valid",
+      "ruleSent": "user.department -eq null",
+      "initialState": "Paused",
+      "postAt": "2026-09-23T10:53:04.4010903Z",
+      "accepted": true,
+      "groupId": "c481ec5b-f4f1-4de0-9657-df81409b0c6e",
+      "postError": null,
+      "storedReadAttempts": [],
+      "storedReadAt": "2026-09-23T10:53:04.6889978Z",
+      "ruleStored": "user.department -eq null",
+      "ruleExactMatch": true,
+      "stateStored": "Paused",
+      "storedReadNote": null,
+      "patchAt": "2026-09-23T10:53:04.8730984Z",
+      "patchError": null,
+      "evaluationStartAt": "2026-09-23T10:53:04.8730984Z",
+      "observations": [
+        {
+          "at": "2026-09-23T10:53:04.7763189Z",
+          "phase": "after-write",
+          "fieldPresent": true,
+          "status": "NotStarted",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+          "readError": null
+        },
+        {
+          "at": "2026-09-23T10:53:05.3835507Z",
+          "phase": "poll",
+          "fieldPresent": true,
+          "status": "NotStarted",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2000-01-01T08:00:00Z",
+          "readError": null
+        },
+        {
+          "at": "2026-09-23T10:53:35.7052858Z",
+          "phase": "poll",
+          "fieldPresent": true,
+          "status": "Succeeded",
+          "errorMessage": null,
+          "lastMembershipUpdated": "2026-09-23T10:53:34Z",
+          "readError": null
+        }
+      ],
+      "terminalStatus": "Succeeded",
+      "terminalAt": "2026-09-23T10:53:35.7052858Z",
+      "terminalError": null,
+      "secondsToObservedTerminal": 31
+    }
+  ],
+  "verdicts": {
+    "A": {
+      "path": "A",
+      "pathDesc": "On a la creation",
+      "write": "Regle invalide refusee a l'ecriture : Response status code does not indicate success: BadRequest (Bad Request).",
+      "evaluation": "Sans objet : l'evaluation n'a pas demarre sur la regle invalide.",
+      "evaluationInterpretable": true,
+      "versusReference": null
+    },
+    "B": {
+      "path": "B",
+      "pathDesc": "Paused puis On (17 aout)",
+      "write": "Regle invalide acceptee a l'ecriture et stockee a l'identique.",
+      "evaluation": "Echec a l'evaluation, observe apres 31 s : 'Membership updates could not be evaluated: unsupported property.'. Controle positif du meme chemin : Succeeded, observe apres 31 s.",
+      "evaluationInterpretable": true,
+      "versusReference": "Reproduit le 17 aout : acceptee a l'ecriture, en echec a l'evaluation, meme message."
+    }
+  },
+  "cleanup": [
+    {
+      "at": "2026-09-23T11:07:06.3792227Z",
+      "id": "65b6cfac-6d7c-4bdc-af7f-7ab28f2c3962",
+      "name": "dynlab-20260923105301-A-valid",
+      "deleted": true,
+      "error": null
+    },
+    {
+      "at": "2026-09-23T11:07:06.7939009Z",
+      "id": "fb8809ce-a7f1-48dd-90b7-827c11fe88d6",
+      "name": "dynlab-20260923105301-B-invalid",
+      "deleted": true,
+      "error": null
+    },
+    {
+      "at": "2026-09-23T11:07:07.2495401Z",
+      "id": "c481ec5b-f4f1-4de0-9657-df81409b0c6e",
+      "name": "dynlab-20260923105301-B-valid",
+      "deleted": true,
+      "error": null
+    }
+  ]
+}

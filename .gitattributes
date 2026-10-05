@@ -11,3 +11,8 @@ samples/lab-intent.json -text
 # Same reasoning for the report: it carries the hash it must agree with, and
 # a diff on it should reflect a different run, not a different platform.
 samples/output.json -text
+
+# The evidence of the frozen group is stored verbatim for the same reason: its
+# reports record the hashes of the manifests shipped next to them, and its
+# readings are only worth something if their bytes are the ones recorded.
+evidence/** -text

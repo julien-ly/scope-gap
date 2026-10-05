@@ -54,6 +54,30 @@ Describe 'Repository integrity' {
         $actual | Should -Be $report.intentSource.sha256
     }
 
+    It 'every evidence report matches the manifest shipped next to it, byte for byte' {
+        $dir = Join-Path $script:root 'evidence/frozen-group/scope-gap'
+        $reports = @(Get-ChildItem -Path $dir -Filter 'scopegap-v*.json' -File)
+
+        # Without this guard, an empty or misplaced folder would make the test pass.
+        $reports.Count | Should -BeGreaterThan 0
+
+        $mismatches = @()
+        foreach ($file in $reports) {
+            $report   = Get-Content $file.FullName -Raw | ConvertFrom-Json
+            $manifest = Join-Path $dir $report.intentSource.path
+            if (-not (Test-Path -LiteralPath $manifest)) {
+                $mismatches += "$($file.Name): manifest '$($report.intentSource.path)' is not shipped"
+                continue
+            }
+            $actual = (Get-FileHash -LiteralPath $manifest -Algorithm SHA256).Hash
+            if ($actual -ne $report.intentSource.sha256) {
+                $mismatches += "$($file.Name): '$($report.intentSource.path)' hashes to $actual, the report recorded $($report.intentSource.sha256)"
+            }
+        }
+
+        $mismatches -join [Environment]::NewLine | Should -BeNullOrEmpty
+    }
+
     It 'every shipped manifest declares complete explicitly' {
         $offenders = @()
 
