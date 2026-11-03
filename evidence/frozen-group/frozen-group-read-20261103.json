@@ -1,0 +1,56 @@
+﻿{
+    "readAtUtc":  "2026-11-03T09:33:15.4862051Z",
+    "groups":  [
+                   {
+                       "group":  {
+                                     "id":  "f7073036-b497-4fff-8455-c61b69208384",
+                                     "@odata.context":  "https://graph.microsoft.com/beta/$metadata#groups(id,displayName,membershipRule,membershipRuleProcessingState,membershipRuleProcessingStatus)/$entity",
+                                     "membershipRuleProcessingState":  "On",
+                                     "displayName":  "dynlab-edit-20260923113815-test",
+                                     "membershipRuleProcessingStatus":  {
+                                                                            "status":  "Failed",
+                                                                            "errorMessage":  "Membership updates could not be evaluated: unsupported property.",
+                                                                            "lastMembershipUpdated":  "\/Date(-62135596800000)\/",
+                                                                            "lastRuleEvaluationUTCDateTime":  null
+                                                                        },
+                                     "membershipRule":  "user.propertyThatDoesNotExist -eq null"
+                                 },
+                       "memberIds":  [
+                                         "5173b363-50b4-42eb-9aec-bdf805033c6f",
+                                         "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+                                         "076e3f09-e9b9-4d73-9f20-706e093773dc",
+                                         "dcb06df7-c781-4584-b05a-e818990e10f8",
+                                         "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+                                         "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+                                         "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+                                         "713a26dd-c446-4afa-b989-8463bf3f8666"
+                                     ]
+                   },
+                   {
+                       "group":  {
+                                     "id":  "528826b3-d258-45e9-8d84-9db15addba12",
+                                     "@odata.context":  "https://graph.microsoft.com/beta/$metadata#groups(id,displayName,membershipRule,membershipRuleProcessingState,membershipRuleProcessingStatus)/$entity",
+                                     "membershipRuleProcessingState":  "On",
+                                     "displayName":  "dynlab-edit-20260923113815-control",
+                                     "membershipRuleProcessingStatus":  {
+                                                                            "status":  "Succeeded",
+                                                                            "errorMessage":  null,
+                                                                            "lastMembershipUpdated":  "\/Date(1790413755000)\/",
+                                                                            "lastRuleEvaluationUTCDateTime":  null
+                                                                        },
+                                     "membershipRule":  "user.department -eq null"
+                                 },
+                       "memberIds":  [
+                                         "5173b363-50b4-42eb-9aec-bdf805033c6f",
+                                         "bacb4928-983e-47b2-be6b-0e6bba539ebf",
+                                         "076e3f09-e9b9-4d73-9f20-706e093773dc",
+                                         "dcb06df7-c781-4584-b05a-e818990e10f8",
+                                         "d04d8bb9-9798-4f03-9bb9-8ed1935a0b00",
+                                         "bca35ea2-65e0-42a5-a080-f4156bcc000e",
+                                         "4b7eb386-2a02-4a11-a2c9-71bc0f5658bb",
+                                         "713a26dd-c446-4afa-b989-8463bf3f8666",
+                                         "9ab19793-7d2f-43d5-a65b-65d6f147f849"
+                                     ]
+                   }
+               ]
+}

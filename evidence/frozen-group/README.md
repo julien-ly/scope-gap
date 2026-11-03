@@ -1,6 +1,6 @@
 # Evidence: a dynamic group that stopped following its rule
 
-These are the readings behind the paragraph "A failed rule can leave the group frozen" in the main README. They come from a lab tenant, between 23 September and 5 October 2026. They are raw outputs of the lab scripts and of `scope-gap`, anonymized as described at the end, and nothing else in them was edited.
+These are the readings behind the paragraph "A failed rule can leave the group frozen" in the main README. They come from a lab tenant, between 23 September and 3 November 2026. They are raw outputs of the lab scripts, of `scope-gap` and of one direct Microsoft Graph read, anonymized where needed as described at the end, and nothing else in them was edited.
 
 They establish one failure, observed once, on one pair of groups. What they do not establish is listed further down.
 
@@ -35,6 +35,10 @@ Two manifests, both complete: the nine users (`scopegap-intent-dynlab-edit.json`
 `scopegap-v01-*`, version 0.1.0, 4 October 2026, eight days after the ninth user was created. On the failed group with the eight original users (`test-8`), version 0.1.0 concludes `NoGapEstablished`. With the nine users (`test-9`), it finds one object under-covered: `dynlab-user9`, still absent. The control (`control-9`) has no gap.
 
 `scopegap-v021-*`, version 0.2.1, 5 October 2026. The same three passes. `test-8` concludes `CoverageNotDemonstrable`, with processing `Failed` and freshness `Stale`. `test-9` keeps the same gap, `dynlab-user9` still absent nine days after its creation, and adds a `RuleProcessingFailed` diagnostic carrying the error message. `control-9` reads processing `Succeeded` and still has no gap. On the failed group the last membership change reads `0001-01-01T00:00:00Z`, earlier than the creation of the group, and is marked unusable; on the control it reads 26 September 2026 at 09:09:15 UTC, the change recorded when the ninth user joined, and is marked usable.
+
+## `frozen-group-read-20261103.json`: the two groups read again
+
+3 November 2026, a direct Microsoft Graph read of the two groups of run `20260923113815`: each group object (rule, processing state and status) and the object identifiers of its members. The test group still reads `Failed` and has eight members, without `dynlab-user9`, thirty-eight days after that user was created. The control reads `Succeeded` and has nine members, including `dynlab-user9`. The file contains no account, path or user display name, so nothing in it was anonymized or edited.
 
 ## What these files do not establish
 
