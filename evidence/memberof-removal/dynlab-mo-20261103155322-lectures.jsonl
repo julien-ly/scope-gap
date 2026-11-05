@@ -1,0 +1,17 @@
+{"Lu":"2026-11-05T13:12:09Z","Groupe":"dynlab-mo-test-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793717918000)\/","Erreur":null,"Membres":"dynlab-mo-a-20261103155322"}
+{"Lu":"2026-11-05T13:12:09Z","Groupe":"dynlab-mo-temoin-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793717919000)\/","Erreur":null,"Membres":"dynlab-mo-a-20261103155322"}
+{"Lu":"2026-11-05T13:14:47Z","Groupe":"MODIFICATION","Etat":"B ajouté au groupe source, service attribué"}
+{"Lu":"2026-11-05T13:19:48Z","Groupe":"dynlab-mo-test-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793884407000)\/","Erreur":null,"Membres":"dynlab-mo-a-20261103155322, dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T13:19:48Z","Groupe":"dynlab-mo-temoin-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793884537000)\/","Erreur":null,"Membres":"dynlab-mo-a-20261103155322, dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T13:24:04Z","Groupe":"MODIFICATION","Etat":"A retiré du groupe source, service changé"}
+{"Lu":"2026-11-05T13:29:04Z","Groupe":"dynlab-mo-test-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793885053000)\/","Erreur":null,"Membres":"dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T13:29:05Z","Groupe":"dynlab-mo-temoin-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793885053000)\/","Erreur":null,"Membres":"dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T13:54:56Z","Groupe":"MODIFICATION","Etat":"Phase 1 : A rajouté au groupe source, aucun attribut modifié"}
+{"Lu":"2026-11-05T13:56:56Z","Groupe":"dynlab-mo-test-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793886932000)\/","Erreur":null,"Membres":"dynlab-mo-a-20261103155322, dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T13:56:56Z","Groupe":"dynlab-mo-temoin-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793885053000)\/","Erreur":null,"Membres":"dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T13:56:57Z","Groupe":"MODIFICATION","Etat":"Phase 2 : B retiré du groupe source, aucun attribut modifié"}
+{"Lu":"2026-11-05T14:00:11Z","Groupe":"dynlab-mo-test-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793887026000)\/","Erreur":null,"Membres":"dynlab-mo-a-20261103155322"}
+{"Lu":"2026-11-05T14:00:11Z","Groupe":"dynlab-mo-temoin-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793885053000)\/","Erreur":null,"Membres":"dynlab-mo-b-20261103155322"}
+{"Lu":"2026-11-05T14:16:53Z","Groupe":"MODIFICATION","Etat":"Retrait 2 : A retiré du groupe source, aucun attribut modifié"}
+{"Lu":"2026-11-05T14:18:55Z","Groupe":"dynlab-mo-test-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793888225000)\/","Erreur":null,"Membres":""}
+{"Lu":"2026-11-05T14:18:55Z","Groupe":"dynlab-mo-temoin-20261103155322","Etat":"On","Statut":"Succeeded","MajMembres":"\/Date(1793885053000)\/","Erreur":null,"Membres":"dynlab-mo-b-20261103155322"}

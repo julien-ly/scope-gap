@@ -202,6 +202,8 @@ samples/lab-intent.json        The manifest used in the recorded run below.
 samples/output.json            The report from that run, against a real tenant.
 evidence/frozen-group/         Readings behind the frozen-group observation,
                                anonymized, with what they do not establish.
+evidence/memberof-removal/     Readings behind MicrosoftDocs/entra-docs#2153:
+                               removals from a memberOf source group.
 ```
 
 ## Recorded run
